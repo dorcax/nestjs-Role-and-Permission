@@ -1,72 +1,36 @@
-// import { Module } from '@nestjs/common';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
-// import { UserModule } from './user/user.module';
-// import { JwtModule } from '@nestjs/jwt';
-// import { ConfigModule, ConfigService } from '@nestjs/config';
-
-
-
-
-// @Module({
-//   imports: [UserModule,
-//      // This makes ConfigModule available globally in your app
-//   ConfigModule.forRoot({
-//     isGlobal:true
-//   }),
-//    // Configure JwtModule using ConfigModule for the secret and expiry
-//   JwtModule.registerAsync({
-//     // Ensure ConfigModule is available
-//     imports: [ConfigModule],
-//     useFactory:async(configService: ConfigService)=>({
-      
-//       // secret: configService.get<string>("JWT_SECRET"),
-//       secret: "MYNEWROLEANDPERMISSION",
-//       signOptions:{ expiresIn:configService.get<string>("EXPIRY")}
-//     }),
-//     // Inject ConfigService to access the environment variables
-
-//     inject:[ConfigService]
-//   })
-  
-   
-//   ],
-//   controllers: [AppController],
-//   providers: [AppService],
-//   exports:[JwtModule]
-// })
-// export class AppModule {}
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import {RolesGuard} from "./guard/RolesGuard"
+import {APP_GUARD} from "@nestjs/core"
+import 'dotenv/config';
+
+
 
 @Module({
   imports: [
     UserModule,
-    // This makes ConfigModule available globally in your app
     ConfigModule.forRoot({
-      isGlobal: true,  // Makes ConfigModule available globally
+      isGlobal: true,  // Ensures .env variables are available globally
     }),
-    // Configure JwtModule using ConfigModule for the secret and expiry
-    JwtModule.registerAsync({
-      // Ensure ConfigModule is available
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        // Get the secret from the environment variable
-        secret: configService.get<string>("JWT_SECRET"),  // Uncomment this line
-        signOptions: { expiresIn: configService.get<string>("EXPIRY") }, // Get expiration time
-      }),
-
-      
-      // Inject ConfigService to access the environment variables
-      inject: [ConfigService],
+    JwtModule.register({
+      secret: process.env.JWT_SECRET ,
+      signOptions: { expiresIn: process.env.EXPIRY },
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    // {
+    //   provide:APP_GUARD,
+    //   useClass:RolesGuard,
+    // },
+  ],
   exports: [JwtModule],
 })
+
+
 export class AppModule {}
+

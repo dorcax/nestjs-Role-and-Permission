@@ -15,15 +15,38 @@ datasource db {
 
 
 
-model User{
+model Vendor{
   id Int @default(autoincrement()) @id
-  name String
+  prod_name String
+  description String
   password String
   email  String @unique
   role    Role @default(USER)
+  isVerified Boolean @default(false)
+  job        Job[]
+  proposal    Proposal[]
 }
 
 
+model Job {
+  id Int @default(autoincrement()) @id
+  title String
+  description String
+  createdBy    Vendor   @relation(fields: [createdById], references: [id])
+  createdById  Int
+  proposal   Proposal[]
+  createdAt DateTime @default(now())
+}
+
+
+model Proposal{
+  id Int @default(autoincrement()) @id
+  job  Job @relation(fields: [jobId],references: [id])
+  jobId Int
+  vendor Vendor @relation(fields: [vendorId],references: [id])
+  vendorId Int
+  createdAt DateTime @default(now())
+}
 
 enum Role{
   ADMIN

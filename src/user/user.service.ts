@@ -74,13 +74,15 @@ async loginUser(@Body() loginUserDto:LoginUserDto){
     }
     // create token for user
   
-    const token =  await this.jwtService.signAsync({sub:user.id},{secret: this.configService.get<string>("JWT_SECRET")})
+    const token =  await this.jwtService.signAsync({sub:user.id,role:user.role},{secret:this.configService.get<string>("JWT_SECRET"),expiresIn:this.configService.get<string>("EXPIRY")})
     
+    console.log('JWT_SECRET:', this.configService.get<string>("JWT_SECRET"));
 
 
 
     return {
       user:user,
+      
       token:token
     }
   } catch (error) {
@@ -89,8 +91,9 @@ async loginUser(@Body() loginUserDto:LoginUserDto){
   }
 
 }
+
   findAll() {
-    return `This action returns all user`;
+    return `This action returns all user in my detsmmmm`;
   }
 
   findOne(id: number) {
