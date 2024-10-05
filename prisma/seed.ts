@@ -1,4 +1,5 @@
 import {PrismaClient} from "@prisma/client"
+import * as bcrypt from "bcrypt"
 
 const prisma =new PrismaClient()
 
@@ -12,7 +13,7 @@ async function main() {
             prod_name:"dorcas venture",
             description:"nnjjjjj",
             isVerified:true,
-            password:"dorcasope123",
+            password: await bcrypt.hash("dorcasopeyemi123",10),
             role:"ADMIN"
 
         }

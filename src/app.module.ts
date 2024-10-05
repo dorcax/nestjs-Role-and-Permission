@@ -6,6 +6,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import {RolesGuard} from "./guard/RolesGuard"
 import {APP_GUARD} from "@nestjs/core"
+import { JobModule } from './job/job.module';
+import { ProposalModule } from './proposal/proposal.module';
 import 'dotenv/config';
 
 
@@ -20,6 +22,8 @@ import 'dotenv/config';
       secret: process.env.JWT_SECRET ,
       signOptions: { expiresIn: process.env.EXPIRY },
     }),
+    JobModule,
+    ProposalModule,
   ],
   controllers: [AppController],
   providers: [AppService,

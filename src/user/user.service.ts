@@ -77,6 +77,9 @@ async loginUser(@Body() loginUserDto:LoginUserDto){
       throw new BadRequestException("invalid credential")
     }
     // create token for user
+    if(!user.isVerified){
+      throw new BadRequestException("user is not verified")
+    }
   
     const token =  await this.jwtService.signAsync({sub:user.id,role:user.role},{secret:this.configService.get<string>("JWT_SECRET"),expiresIn:this.configService.get<string>("EXPIRY")})
     
@@ -96,14 +99,48 @@ async loginUser(@Body() loginUserDto:LoginUserDto){
 
 }
 
-  findAll() {
-    return `This action returns all user in my detsmmmm`;
+
+// verify user by admin 
+ async verifyUser(id:number){
+  try {
+
+    // find the user to verify
+    const vendoruser =await this.prisma.vendor.findUnique({
+      where:{
+        id:id
+      }
+    })
+
+    if(!vendoruser){
+      throw new  BadRequestException("user id not found")
+
+    }
+    const vendor =await this.prisma.vendor.update({
+      where:{
+        id:id
+      },
+      data:{
+        isVerified:true
+      }
+    })
+    return vendor
+    
+  } catch (error) {
+    throw new InternalServerErrorException(error.message)
+  }
+
+ }
+
+ async findAll() {
+    const user =await  this.prisma.vendor.findMany({})
+    return {message:"list of user fecthed",user:user};
   }
 
   findOne(id: number) {
     return `This action returns a #${id} user`;
   }
 
+  
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
