@@ -14,10 +14,10 @@ export class UserService {
 
   ){}
  async createUser(createUserDto: CreateUserDto) {
-       const {email,password,name} =createUserDto
+       const {email,password,prod_name,description} =createUserDto
 
-      //  find user exist 
-      const userExist = await this.prisma.user.findUnique({
+      //  find user exist ,
+      const userExist = await this.prisma.vendor.findUnique({
         where:{
           email
         }
@@ -28,16 +28,20 @@ export class UserService {
 
       // create new user 
       const hashPassword =await bcrypt.hash(password,10)
-      const user =await this.prisma.user.create({
+      const user =await this.prisma.vendor.create({
         data:{
-          name,
+          
+          prod_name,
           email,
-          password:hashPassword
+          password:hashPassword,
+          description
+
         }
+
       })
     return {message:"user registered successfully",user:{
       id:user.id,
-      name:user.name,
+      name:user.prod_name,
       email:user.email,
       role:user.role
     }}
@@ -56,7 +60,7 @@ async loginUser(@Body() loginUserDto:LoginUserDto){
 
     // find the email
 
-    const user =await this.prisma.user.findUnique({
+    const user =await this.prisma.vendor.findUnique({
       where:{
         email:email
       }

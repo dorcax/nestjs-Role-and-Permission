@@ -23,8 +23,10 @@ model Vendor{
   email  String @unique
   role    Role @default(USER)
   isVerified Boolean @default(false)
-  job        Job[]
   proposal    Proposal[]
+  jobsAssigned  Job[]    @relation("AssignedJobs")
+  jobsCreated   Job[]    @relation("CreatedJobs")
+
 }
 
 
@@ -32,9 +34,13 @@ model Job {
   id Int @default(autoincrement()) @id
   title String
   description String
-  createdBy    Vendor   @relation(fields: [createdById], references: [id])
+  createdBy    Vendor   @relation("CreatedJobs", fields: [createdById], references: [id])
   createdById  Int
   proposal   Proposal[]
+  isAssigned   Boolean  @default(false) // Indicates if the job has been given out
+  assignedTo   Vendor?  @relation("AssignedJobs", fields: [assignedToId], references: [id])
+  
+  assignedToId Int?     
   createdAt DateTime @default(now())
 }
 
@@ -45,6 +51,7 @@ model Proposal{
   jobId Int
   vendor Vendor @relation(fields: [vendorId],references: [id])
   vendorId Int
+  isApproved  Boolean  @default(false)
   createdAt DateTime @default(now())
 }
 
