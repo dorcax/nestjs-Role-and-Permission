@@ -36,7 +36,7 @@ export class UserController {
   
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard,RolesGuard)  // Both AuthGuard and RolesGuard
-  @Get('allusers')
+  @Get('allvendors')
   findAll() {
       return this.userService.findAll();
   }

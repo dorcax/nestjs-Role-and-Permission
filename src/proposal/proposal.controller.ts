@@ -1,34 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Req, UseGuards } from '@nestjs/common';
 import { ProposalService } from './proposal.service';
 import { CreateProposalDto } from './dto/create-proposal.dto';
 import { UpdateProposalDto } from './dto/update-proposal.dto';
+import { Roles } from 'src/user/decorator/roles.decorator';
+import { Role } from 'src/user/entities/role.enum';
+import { AuthGuard } from 'src/guard/authguard';
+import { RolesGuard } from 'src/guard/RolesGuard';
 
 @Controller('proposal')
 export class ProposalController {
   constructor(private readonly proposalService: ProposalService) {}
 
-  @Post()
-  create(@Body() createProposalDto: CreateProposalDto) {
-    return this.proposalService.create(createProposalDto);
+  @Roles(Role.USER)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Post("apply/:jobId")
+  create(@Param("jobId") jobId:string, @Body() createProposalDto: CreateProposalDto,@Req() req) {
+    const vendorId =req.user.sub
+    return this.proposalService.create(createProposalDto,vendorId,+jobId);
   }
 
-  @Get()
-  findAll() {
-    return this.proposalService.findAll();
-  }
+  // approve the proposal
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Patch("verify/:vendorId/:proposalId")
+  verifyProposal(@Param("vendorId") vendorId :string, @Param("proposalId") proposalId :string){
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.proposalService.findOne(+id);
-  }
+    return this.proposalService.verifyProposal(+vendorId,+proposalId)
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProposalDto: UpdateProposalDto) {
-    return this.proposalService.update(+id, updateProposalDto);
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.proposalService.remove(+id);
   }
-}

@@ -34,6 +34,7 @@ model Job {
   id Int @default(autoincrement()) @id
   title String
   description String
+  price Float
   createdBy    Vendor   @relation("CreatedJobs", fields: [createdById], references: [id])
   createdById  Int
   proposal   Proposal[]
@@ -48,6 +49,8 @@ model Job {
 model Proposal{
   id Int @default(autoincrement()) @id
   job  Job @relation(fields: [jobId],references: [id])
+  description String
+  price Float
   jobId Int
   vendor Vendor @relation(fields: [vendorId],references: [id])
   vendorId Int
