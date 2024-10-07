@@ -27,19 +27,13 @@ export class UserController {
     return this.userService.createUser(createUserDto);
   }
 
+
+ 
+  
   @Post('login')
   // @SetMetadata("roles",[Role.ADMIN])
   login(@Body() loginUserDto: LoginUserDto) {
     return this.userService.loginUser(loginUserDto);
-  }
-
-  // verify user
-
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthGuard, RolesGuard)
-  @Patch(':vendorId')
-  verifyUser(@Param('vendorId') vendorId: string) {
-    return this.userService.verifyUser(+vendorId);
   }
 
   @Roles(Role.ADMIN)

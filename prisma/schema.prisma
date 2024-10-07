@@ -12,21 +12,34 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+ 
 
+model User{
+  id Int @default(autoincrement()) @id
+  name    String
+  email     String @unique
+  password    String 
+  role        Role @default(VENDOR)
+  createdAt     DateTime @default(now())
+  jobsCreated   Job[]    @relation("CreatedJobs")
+  vendor         Vendor[]
+
+}
 
 
 model Vendor{
   id Int @default(autoincrement()) @id
-  prod_name String
+  bussiness_name String
   description String
-  password String
-  email  String @unique
-  role    Role @default(USER)
-  isVerified Boolean @default(false)
+  bussiness_address String
+   isApproved   Boolean @default(false)
   proposal    Proposal[]
   jobsAssigned  Job[]    @relation("AssignedJobs")
-  jobsCreated   Job[]    @relation("CreatedJobs")
+  user           User @relation(fields: [userId] ,references: [id])
+  userId          Int 
+  createdAt     DateTime @default(now())
 
+ 
 }
 
 
@@ -35,7 +48,7 @@ model Job {
   title String
   description String
   price Float
-  createdBy    Vendor   @relation("CreatedJobs", fields: [createdById], references: [id])
+  createdBy    User   @relation("CreatedJobs", fields: [createdById], references: [id])
   createdById  Int
   proposal   Proposal[]
   isAssigned   Boolean  @default(false) // Indicates if the job has been given out
@@ -60,5 +73,5 @@ model Proposal{
 
 enum Role{
   ADMIN
-  USER
+  VENDOR
 }

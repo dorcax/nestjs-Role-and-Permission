@@ -8,6 +8,7 @@ import {RolesGuard} from "./guard/RolesGuard"
 import {APP_GUARD} from "@nestjs/core"
 import { JobModule } from './job/job.module';
 import { ProposalModule } from './proposal/proposal.module';
+import { VendorModule } from './vendor/vendor.module';
 import 'dotenv/config';
 
 
@@ -24,6 +25,7 @@ import 'dotenv/config';
     }),
     JobModule,
     ProposalModule,
+    VendorModule,
   ],
   controllers: [AppController],
   providers: [AppService,

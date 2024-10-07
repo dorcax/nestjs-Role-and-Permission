@@ -19,13 +19,13 @@ export class UserService {
     private prisma: PrismaService,
     private readonly jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+  ) { }
   async createUser(createUserDto: CreateUserDto) {
-    const { email, password, prod_name, description } = createUserDto;
+    const { email, password, name } = createUserDto;
 
     try {
       //  find user exist ,
-      const userExist = await this.prisma.vendor.findUnique({
+      const userExist = await this.prisma.user.findUnique({
         where: {
           email,
         },
@@ -36,19 +36,19 @@ export class UserService {
 
       // create new user
       const hashPassword = await bcrypt.hash(password, 10);
-      const user = await this.prisma.vendor.create({
+      const user = await this.prisma.user.create({
         data: {
-          prod_name,
+          name,
           email,
           password: hashPassword,
-          description,
+
         },
       });
       return {
         message: 'user registered successfully',
         user: {
           id: user.id,
-          name: user.prod_name,
+          name: user.name,
           email: user.email,
           role: user.role,
         },
@@ -58,6 +58,11 @@ export class UserService {
     }
   }
 
+
+
+  
+
+
   // login in user
 
   async loginUser(@Body() loginUserDto: LoginUserDto) {
@@ -66,7 +71,7 @@ export class UserService {
 
       // find the email
 
-      const user = await this.prisma.vendor.findUnique({
+      const user = await this.prisma.user.findUnique({
         where: {
           email: email,
         },
@@ -81,11 +86,8 @@ export class UserService {
       if (!isMatch) {
         throw new BadRequestException('invalid credential');
       }
+    
       // create token for user
-      if (!user.isVerified) {
-        throw new BadRequestException('user is not verified');
-      }
-
       const token = await this.jwtService.signAsync(
         { sub: user.id, role: user.role },
         {
@@ -107,33 +109,8 @@ export class UserService {
     }
   }
 
-  // verify user by admin
-  async verifyUser(vendorId: number) {
-    try {
-      // find the user to verify
-      const vendoruser = await this.prisma.vendor.findUnique({
-        where: {
-          id: vendorId,
-        },
-      });
 
-      if (!vendoruser) {
-        throw new BadRequestException('vendor id not found');
-      }
-      const vendor = await this.prisma.vendor.update({
-        where: {
-          id: vendorId,
-        },
-        data: {
-          isVerified: true,
-        },
-      });
 
-      return vendor;
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-  }
 
   async findAll() {
     const user = await this.prisma.vendor.findMany({});

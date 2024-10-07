@@ -5,9 +5,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateJobDto } from './dto/create-job.dto';
-import { UpdateJobDto } from './dto/update-job.dto';
 import { PrismaService } from 'src/prisma.service';
-import { connect } from 'http2';
+
 
 @Injectable()
 export class JobService {
@@ -26,9 +25,7 @@ export class JobService {
           },
         },
       });
-      if (!job) {
-        throw new BadRequestException('an error occurred while creating job');
-      }
+
       return { message: 'job created sucessfully', job };
     } catch (error) {
       throw new InternalServerErrorException(error.message);
@@ -59,7 +56,7 @@ export class JobService {
           isAssigned: true,
         },
       });
-      return assignedTo;
+      return { message: 'job have been assigned to a vendor ', assignedTo };
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
