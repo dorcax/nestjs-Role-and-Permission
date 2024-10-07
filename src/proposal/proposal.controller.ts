@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ProposalService } from './proposal.service';
 import { CreateProposalDto } from './dto/create-proposal.dto';
 import { UpdateProposalDto } from './dto/update-proposal.dto';
@@ -12,20 +22,25 @@ export class ProposalController {
   constructor(private readonly proposalService: ProposalService) {}
 
   @Roles(Role.USER)
-  @UseGuards(AuthGuard,RolesGuard)
-  @Post("apply/:jobId")
-  create(@Param("jobId") jobId:string, @Body() createProposalDto: CreateProposalDto,@Req() req) {
-    const vendorId =req.user.sub
-    return this.proposalService.create(createProposalDto,vendorId,+jobId);
+  @UseGuards(AuthGuard, RolesGuard)
+  @Post('apply/:jobId')
+  create(
+    @Param('jobId') jobId: string,
+    @Body() createProposalDto: CreateProposalDto,
+    @Req() req,
+  ) {
+    const vendorId = req.user.sub;
+    return this.proposalService.create(createProposalDto, vendorId, +jobId);
   }
 
   // approve the proposal
   @Roles(Role.ADMIN)
-  @UseGuards(AuthGuard,RolesGuard)
-  @Patch("verify/:vendorId/:proposalId")
-  verifyProposal(@Param("vendorId") vendorId :string, @Param("proposalId") proposalId :string){
-
-    return this.proposalService.verifyProposal(+vendorId,+proposalId)
-
+  @UseGuards(AuthGuard, RolesGuard)
+  @Patch('verify/:vendorId/:proposalId')
+  verifyProposal(
+    @Param('vendorId') vendorId: string,
+    @Param('proposalId') proposalId: string,
+  ) {
+    return this.proposalService.verifyProposal(+vendorId, +proposalId);
   }
-  }
+}
