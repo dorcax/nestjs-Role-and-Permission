@@ -12,10 +12,29 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class ProposalService {
   constructor(private prisma: PrismaService) {}
-  async create(createProposalDto: CreateProposalDto, vendorId, jobId: number) {
+  async create(createProposalDto: CreateProposalDto,  jobId: number,vendorId) {
     try {
       // destructure the dto
       const { description, price } = createProposalDto;
+        //  Ensure the vendor exists
+        const user = await this.prisma.user.findUnique({
+          where: { id: vendorId },
+          include:{vendor:true}
+        });
+  
+        if (!user) {
+          throw new BadRequestException('Vendor not found');
+        }
+  
+        //  Ensure the job exists
+        const job = await this.prisma.job.findUnique({
+          where: { id: jobId },
+        });
+  
+        if (!job) {
+          throw new BadRequestException('Job not found');
+        }
+  
       const proposal = await this.prisma.proposal.create({
         data: {
           description,
@@ -27,7 +46,7 @@ export class ProposalService {
           },
           vendor: {
             connect: {
-              id: vendorId,
+            id:1,
             },
           },
         },

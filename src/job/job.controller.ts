@@ -33,7 +33,7 @@ export class JobController {
   @UseGuards(AuthGuard, RolesGuard)
   @Patch('assignJob/:jobId/:vendorId')
   assignJob(
-    @Param('jobID') jobId: string,
+    @Param('jobId') jobId: string,
     @Param('vendorId') vendorId: string,
   ) {
     return this.jobService.assignJobToVendor(+jobId, +vendorId);

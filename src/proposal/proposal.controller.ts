@@ -21,7 +21,7 @@ import { RolesGuard } from 'src/guard/RolesGuard';
 export class ProposalController {
   constructor(private readonly proposalService: ProposalService) {}
 
-  @Roles(Role.USER)
+  @Roles(Role.VENDOR)
   @UseGuards(AuthGuard, RolesGuard)
   @Post('apply/:jobId')
   create(
@@ -30,7 +30,8 @@ export class ProposalController {
     @Req() req,
   ) {
     const vendorId = req.user.sub;
-    return this.proposalService.create(createProposalDto, vendorId, +jobId);
+    console.log(vendorId)
+    return this.proposalService.create(createProposalDto, +jobId,vendorId);
   }
 
   // approve the proposal

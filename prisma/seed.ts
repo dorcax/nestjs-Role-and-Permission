@@ -5,14 +5,12 @@ const prisma =new PrismaClient()
 
 
 async function main() {
-    const admin =await prisma.vendor.upsert({
+    const admin =await prisma.user.upsert({
         where:{email:"opeyemiibrahim667@gmail.com"},
         update:{},
         create:{
             email:"opeyemiibrahim667@gmail.com",
-            prod_name:"dorcas venture",
-            description:"nnjjjjj",
-            isVerified:true,
+            name:"dorcas bbb",
             password: await bcrypt.hash("dorcasopeyemi123",10),
             role:"ADMIN"
 

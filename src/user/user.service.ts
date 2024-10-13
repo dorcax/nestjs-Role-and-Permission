@@ -113,7 +113,7 @@ export class UserService {
 
 
   async findAll() {
-    const user = await this.prisma.vendor.findMany({});
+    const user = await this.prisma.user.findMany({});
     return { message: 'list of user fecthed', user: user };
   }
 }

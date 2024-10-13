@@ -7,7 +7,6 @@ import {
 import { CreateJobDto } from './dto/create-job.dto';
 import { PrismaService } from 'src/prisma.service';
 
-
 @Injectable()
 export class JobService {
   constructor(private prisma: PrismaService) {}
@@ -32,6 +31,10 @@ export class JobService {
     }
   }
 
+
+
+  
+
   // assigned job to the vendor
   async assignJobToVendor(jobId: number, vendorId: number) {
     try {
@@ -47,6 +50,22 @@ export class JobService {
       // check if job is assigned
       if (job.isAssigned) {
         throw new BadRequestException('Job has already been assigned');
+      }
+
+      //  Check if there is an approved proposal from the vendor
+      const approvedProposal = await this.prisma.proposal.findFirst({
+        where: {
+          jobId: jobId,
+          vendorId: vendorId,
+          isApproved: true, // Check if the proposal is approved
+        },
+      });
+
+      // If no approved proposal is found
+      if (!approvedProposal) {
+        throw new BadRequestException(
+          'No approved proposal found for this vendor',
+        );
       }
       // assign job to vendor
       const assignedTo = await this.prisma.job.update({

@@ -22,21 +22,20 @@ model User{
   role        Role @default(VENDOR)
   createdAt     DateTime @default(now())
   jobsCreated   Job[]    @relation("CreatedJobs")
-  vendor         Vendor[]
+  vendor         Vendor?
 
 }
 
 
 model Vendor{
-  id Int @default(autoincrement()) @id
   bussiness_name String
   description String
   bussiness_address String
-   isApproved   Boolean @default(false)
+  isApproved   Boolean @default(false)
   proposal    Proposal[]
-  jobsAssigned  Job[]    @relation("AssignedJobs")
+  Assignedjobs   AssignedJob[]   
   user           User @relation(fields: [userId] ,references: [id])
-  userId          Int 
+  userId          Int  @unique
   createdAt     DateTime @default(now())
 
  
@@ -52,24 +51,35 @@ model Job {
   createdById  Int
   proposal   Proposal[]
   isAssigned   Boolean  @default(false) // Indicates if the job has been given out
-  assignedTo   Vendor?  @relation("AssignedJobs", fields: [assignedToId], references: [id])
-  
-  assignedToId Int?     
+  assigned      AssignedJob?
   createdAt DateTime @default(now())
 }
 
 
 model Proposal{
   id Int @default(autoincrement()) @id
+  vendor  Vendor @relation(fields: [vendorId],references: [userId])
+  vendorId Int
   job  Job @relation(fields: [jobId],references: [id])
   description String
   price Float
   jobId Int
-  vendor Vendor @relation(fields: [vendorId],references: [id])
-  vendorId Int
-  isApproved  Boolean  @default(false)
+  assigned   AssignedJob?
+  isAssigned Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+
+
+model AssignedJob{
+  vendor Vendor @relation(fields: [vendorId],references: [userId])
+  vendorId Int
+  proposal Proposal @relation(fields: [proposalId],references: [id])
+  proposalId Int @unique 
+  job    Job @relation(fields: [jobId],references: [id])
+  jobId Int @unique
+
+}
+
 
 enum Role{
   ADMIN
