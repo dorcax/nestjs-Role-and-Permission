@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString } from "class-validator"
 export class CreateVendorDto {
     @IsNotEmpty()
     @IsString()
-    bussiness_name:string
+    businessName:string
 
     @IsNotEmpty()
     @IsString()
@@ -11,5 +11,5 @@ export class CreateVendorDto {
 
     @IsNotEmpty()
     @IsString()
-    bussiness_address:string
+    businessAddress:string
 }

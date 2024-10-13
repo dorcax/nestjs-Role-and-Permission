@@ -5,13 +5,13 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class VendorService {
   constructor (private prisma:PrismaService){}
-  async create(createVendorDto: CreateVendorDto,userId) {
+  async create(createVendorDto: CreateVendorDto,userId:string) {
     try {
-      const {bussiness_address,bussiness_name,description} =createVendorDto
+      const {businessAddress,businessName,description} =createVendorDto
       const vendor = await this.prisma.vendor.create({
         data:{
-          bussiness_address,
-          bussiness_name,
+          businessAddress,
+          businessName,
           description,
           user:{
             connect:{
@@ -21,7 +21,7 @@ export class VendorService {
         }
 
       })
-      return {message:"the vendor have been registered successfully",vendor}
+      return {message:" vendor registered successfully",vendor}
     } catch (error) {
       throw new InternalServerErrorException(error.message)
 
@@ -33,7 +33,7 @@ export class VendorService {
 
 
    // verify user by admin
-   async verifyUser(vendorId: number) {
+   async verifyUser(vendorId:string) {
     try {
       // find the user to verify
       const vendor = await this.prisma.vendor.findUnique({

@@ -7,7 +7,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto, LoginUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -113,7 +112,7 @@ export class UserService {
 
 
   async findAll() {
-    const user = await this.prisma.user.findMany({});
+    const user = await this.prisma.user.findMany();
     return { message: 'list of user fecthed', user: user };
   }
 }

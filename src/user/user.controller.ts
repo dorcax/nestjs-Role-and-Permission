@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, LoginUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from './entities/role.enum';
 import { AuthGuard } from '../guard/authguard';
 import { Roles } from './decorator/roles.decorator';
@@ -22,6 +21,8 @@ import { RolesGuard } from '../guard/RolesGuard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+
+  
   @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);

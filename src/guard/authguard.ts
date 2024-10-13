@@ -14,19 +14,19 @@ export class AuthGuard implements CanActivate{
         const request = context.switchToHttp().getRequest()
         const token = this.ExtractfromHeader(request)
         if(!token){
-            throw new UnauthorizedException("invalid credential iiii")
+            throw new UnauthorizedException("no token found")
         }
         try {
             const payload =await this.jwtService.verifyAsync(token,{secret:this.configService.get<string>("JWT_SECRET")})
             console.log(payload)
         if(!payload){
-            throw new UnauthorizedException("invalid Credentials llll")
+            throw new UnauthorizedException("invalid Credentials")
         }
         request.user =payload
         console.log("User in AuthGuard:", request.user); // Inside AuthGuard
         } catch (error) {
             console.log(error.message)
-            throw new UnauthorizedException("invalid credentials mmmm")
+            throw new UnauthorizedException("invalid credentials")
         }
         return true
         

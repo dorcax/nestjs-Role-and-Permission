@@ -33,8 +33,8 @@ export class VendorController {
 
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
-  @Patch(':userId')
-  verifyUser(@Param('userId') userId: string) {
-    return this.vendorService.verifyUser(+userId);
+  @Patch(':vendorId')
+  verifyUser(@Param('vendorId') vendorId: string) {
+    return this.vendorService.verifyUser(vendorId);
   }
 }
