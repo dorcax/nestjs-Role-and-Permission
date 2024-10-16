@@ -23,15 +23,14 @@ export class ProposalController {
 
   @Roles(Role.VENDOR)
   @UseGuards(AuthGuard, RolesGuard)
-  @Post('apply/:jobId')
+  @Post('apply/:vendorId/:jobId')
   create(
+    @Param('vendorId') vendorId: string,
     @Param('jobId') jobId: string,
     @Body() createProposalDto: CreateProposalDto,
-    @Req() req,
+ 
   ) {
-    const vendorId = req.user.sub;
-    console.log(vendorId)
-    return this.proposalService.create(createProposalDto, +jobId,vendorId);
+    return this.proposalService.createProposal(createProposalDto, jobId,vendorId);
   }
 
   // approve the proposal
@@ -42,6 +41,6 @@ export class ProposalController {
     @Param('vendorId') vendorId: string,
     @Param('proposalId') proposalId: string,
   ) {
-    return this.proposalService.verifyProposal(+vendorId, +proposalId);
+    return this.proposalService.verifyProposal(vendorId, proposalId);
   }
 }

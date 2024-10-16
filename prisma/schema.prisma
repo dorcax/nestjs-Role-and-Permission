@@ -60,7 +60,7 @@ model Proposal {
   job         Job          @relation(fields: [jobId], references: [id])
   jobId       String
   assigned    AssignedJob?
-  isAssigned  Boolean      @default(false)
+  isApproved  Boolean      @default(false)
   createdAt   DateTime     @default(now())
 }
 

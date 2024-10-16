@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -10,7 +11,7 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class JobService {
   constructor(private prisma: PrismaService) {}
-  async createJob(createJobDto: CreateJobDto, adminId) {
+  async createJob(createJobDto: CreateJobDto, adminId: string) {
     try {
       const { title, description, price } = createJobDto;
 
@@ -31,53 +32,71 @@ export class JobService {
     }
   }
 
-
-
-  
-
-  // assigned job to the vendor
-  async assignJobToVendor(jobId: number, vendorId: number) {
-    try {
-      // find the job
-      const job = await this.prisma.job.findUnique({
-        where: {
-          id: jobId,
-        },
-      });
-      if (!job) {
-        throw new BadRequestException('job id not found ');
-      }
-      // check if job is assigned
-      if (job.isAssigned) {
-        throw new BadRequestException('Job has already been assigned');
-      }
-
-      //  Check if there is an approved proposal from the vendor
-      const approvedProposal = await this.prisma.proposal.findFirst({
-        where: {
-          jobId: jobId,
-          vendorId: vendorId,
-          isApproved: true, // Check if the proposal is approved
-        },
-      });
-
-      // If no approved proposal is found
-      if (!approvedProposal) {
-        throw new BadRequestException(
-          'No approved proposal found for this vendor',
-        );
-      }
-      // assign job to vendor
-      const assignedTo = await this.prisma.job.update({
-        where: { id: jobId },
-        data: {
-          assignedToId: vendorId,
-          isAssigned: true,
-        },
-      });
-      return { message: 'job have been assigned to a vendor ', assignedTo };
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
+  // ASSIGNED JOB
+  async assignedJob(jobId: string, vendorId: string, proposalId: string) {
+    // find if vendorId exist and approved
+    const vendor = await this.prisma.vendor.findUnique({
+      where: {
+        id: vendorId,
+      },
+    });
+    if (!vendor || !vendor.isApproved) {
+      throw new NotFoundException('vendor is either not approved or not found');
     }
+    // find if job exist and is not assigned
+    const job = await this.prisma.job.findUnique({
+      where: {
+        id: jobId,
+      },
+    });
+    if (!job) {
+      throw new NotFoundException('job id not found');
+    }
+    if (job.isAssigned) {
+      throw new BadRequestException('job is already assigned');
+    }
+    // find if proposal exist and is approved
+    const proposal = await this.prisma.proposal.findUnique({
+      where: {
+        id: proposalId,
+      },
+    });
+    if (!proposal || !proposal.isApproved) {
+      throw new NotFoundException(
+        'proposal id not found   proposal not approved',
+      );
+    }
+    // assign job to the vendor
+
+    const assignJob = await this.prisma.assignedJob.create({
+      data: {
+        vendor: {
+          connect: {
+            id: vendorId,
+          },
+        },
+        job: {
+          connect: {
+            id: jobId,
+          },
+        },
+        proposal: {
+          connect: {
+            id: proposalId,
+          },
+        },
+      },
+    });
+
+    // update the job status
+    const jobStatus =await this.prisma.job.update({
+      where:{
+        id:jobId
+      },
+      data:{
+        isAssigned:true
+      }
+    })
+    return {message:"job assigned successfully",assignJob}
   }
 }

@@ -31,11 +31,12 @@ export class JobController {
 
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
-  @Patch('assignJob/:jobId/:vendorId')
+  @Patch('assignJob/:jobId/:vendorId/:proposalId')
   assignJob(
     @Param('jobId') jobId: string,
     @Param('vendorId') vendorId: string,
+    @Param("proposalId") proposalId:string
   ) {
-    return this.jobService.assignJobToVendor(+jobId, +vendorId);
+    return this.jobService.assignedJob(jobId, vendorId,proposalId);
   }
 }
