@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../Slices/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
-const Register = () => {
+import { loginUser } from '../Slices/authSlice';
+const Login = () => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
-  const [data, setData] = useState({ name: '', email: '', password: '' });
-  const [formErrors, setFormError] = useState({});
+  const [data, setData] = useState({ email: '', password: '' });
+  const [formError, setFormError] = useState({});
   const navigate =useNavigate()
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
     setData((prev) => ({
       ...prev,
       [name]: value,
@@ -23,26 +22,28 @@ const Register = () => {
     e.preventDefault();
     const validateError = validateForm(data);
     setFormError(validateError);
-    if(Object.keys(validateError)){
-      dispatch(registerUser(data));
-      setData({name:"",password:"",email:""})
-       navigate("/login")
-    }
-   
+    // Only dispatch loginUser if there are no validation errors
+      if (Object.keys(validateError).length === 0) {
+    dispatch(loginUser(data));
+      setData({email:"",password:""})
+      navigate("/dashboard")
+      
+      }
+
+  
   };
-  // validate form
+
+  //   validation error
   const validateForm = (data) => {
-    let error = {};
-    if (!data.name) {
-      error.name = 'name is required !';
+    let errors = {};
+
+    if (!data.email) {
+      errors.email = 'enter a valid email !';
     }
     if (!data.password) {
-      error.password = 'password is required !';
+      errors.password = 'enter your password !';
     }
-    if (!data.email) {
-      error.email = 'email is required ! ';
-    }
-    return error;
+    return errors;
   };
   return (
     <section className=" container shadow-2xl rounded-2xl w-[350px]  mx-auto my-20">
@@ -55,24 +56,11 @@ const Register = () => {
         <span className="">
           <i className="fa-solid fa-arrow-left text-blue-800 text-lg pb-4"></i>
         </span>
-        <h1 className="text-blue-800 text-2xl capitalize font-bold py-3">
-          hi!
+        <h1 className="text-blue-800 text-2xl capitalize font-bold pt-3">
+          welcome!
         </h1>
-        <p className="text-md text-gray-900 ">Create a new account</p>
-        <div className="">
-          <input
-            type="text"
-            name="name"
-            value={data.name}
-            onChange={handleChange}
-            id=""
-            placeholder="name"
-            className={clsx("border-b-2  border-b-gray-400 w-[250px] outline-none",formErrors.name?"my-5":"my-10")}
-          />
-          {formErrors.name && (
-            <div className="text-red-800 text-md">{formErrors.name}</div>
-          )}
-        </div>
+        <p className="text-md text-gray-900 pb-4">Sign in to continue</p>
+
         <div>
           <input
             type="email"
@@ -81,10 +69,13 @@ const Register = () => {
             onChange={handleChange}
             id=""
             placeholder="email"
-            className={clsx("border-b-2 border-b-gray-400  w-[250px] outline-none focus:bg-white",formErrors.password?"my-5":"my-8")}
+            className={clsx(
+              'border-b-2 border-b-gray-400 outline-none w-[250px] focus:bg-white',
+              formError.email ? 'my-2' : 'my-10',
+            )}
           />
-          {formErrors.email && (
-            <div className="text-red-800 text-md">{formErrors.email}</div>
+          {formError.email && (
+            <div className="text-red-800 text-md">{formError.email}</div>
           )}
         </div>
         <div>
@@ -95,22 +86,25 @@ const Register = () => {
             onChange={handleChange}
             id=""
             placeholder="password"
-            className="border-b-2 border-b-gray-400 my-5 w-[250px] outline-none"
+            className={clsx(
+              'border-b-2 border-b-gray-400  w-[250px] outline-none',
+              formError.password ? 'my-2' : 'my-5',
+            )}
           />
-          {formErrors.password && (
+          {formError.password && (
             <div className="text-red-800 text-md pb-3">
-              {formErrors.password}
+              {formError.password}
             </div>
           )}
         </div>
         <button
-          className={clsx(
+           className={clsx(
             'mx-auto w-[200px] text-center py-1 uppercase text-sm rounded-md my-6',
             loading ? 'bg-gray-400 text-white' : 'bg-blue-800 text-white' ,
           )}
-          disabled={loading}
+          disabled={loading }
         >
-          sign up
+          Login
         </button>
 
         <div className="flex justify-center items-center w-full mt-2">
@@ -154,9 +148,9 @@ const Register = () => {
         </div>
         <div className="mx-auto">
           <p className="text-sm  text-gray-900">
-            Already have an account ?
+            Don't have an account ?
             <span className="px-2 text-blue-800 text-md font-bold ">
-              <Link to="/login">sign in</Link>
+              <Link to="/">sign up</Link>
             </span>
           </p>
         </div>
@@ -165,4 +159,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
