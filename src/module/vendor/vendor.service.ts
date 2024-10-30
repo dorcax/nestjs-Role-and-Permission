@@ -31,7 +31,7 @@ export class VendorService {
   }
 
   // verify user by admin
-  async verifyUser(vendorId: string) {
+  async verifyVendor(vendorId: string) {
     try {
       // find the user to verify
       const vendor = await this.prisma.vendor.findUnique({
@@ -57,4 +57,47 @@ export class VendorService {
       throw new InternalServerErrorException(error.message);
     }
   }
+
+  // fetch all vendor
+
+  async fetchVendors() {
+    try {
+      const vendors = await this.prisma.vendor.findMany({
+        include: {
+          proposal: true,
+          user: true,
+        },
+      });
+      return {
+        vendor: vendors,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+ 
+  // filter vendor  
+
+  async filterVendor(isApproved:boolean,searchTerm:string){
+    try {
+     if(isApproved !=undefined){
+      const vendor =await this.prisma.vendor.findMany({where:{isApproved}})
+     }
+     if(searchTerm){
+      const vendor =await this.prisma.vendor.findMany({
+        where:{
+          businessName:{
+            contains:searchTerm,
+            mode:"insensitive"
+          }
+        }
+      })
+     }
+      
+    } catch (error) {
+      throw new InternalServerErrorException(error.messgae)
+    }
+
+  }
+
 }

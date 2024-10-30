@@ -47,7 +47,7 @@ export class ProposalService {
         price,
         vendor: {
           connect: {
-            userId: vendorId,
+            id: vendorId,
           },
         },
         job: {

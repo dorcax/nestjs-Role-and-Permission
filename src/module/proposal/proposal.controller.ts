@@ -12,10 +12,10 @@ import {
 import { ProposalService } from './proposal.service';
 import { CreateProposalDto } from './dto/create-proposal.dto';
 import { UpdateProposalDto } from './dto/update-proposal.dto';
-import { Roles } from 'src/user/decorator/roles.decorator';
-import { Role } from 'src/user/entities/role.enum';
-import { AuthGuard } from 'src/guard/authguard';
-import { RolesGuard } from 'src/guard/RolesGuard';
+import { Roles } from '../auth/decorator/roles.decorator';
+import { Role } from '../auth/entities/role.enum';
+import { AuthGuard } from 'src/module/auth/guard/authguard';
+import { RolesGuard } from 'src/module/auth/guard/RolesGuard';
 
 @Controller('proposal')
 export class ProposalController {
@@ -28,9 +28,12 @@ export class ProposalController {
     @Param('vendorId') vendorId: string,
     @Param('jobId') jobId: string,
     @Body() createProposalDto: CreateProposalDto,
- 
   ) {
-    return this.proposalService.createProposal(createProposalDto, jobId,vendorId);
+    return this.proposalService.createProposal(
+      createProposalDto,
+      jobId,
+      vendorId,
+    );
   }
 
   // approve the proposal

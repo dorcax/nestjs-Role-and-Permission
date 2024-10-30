@@ -12,10 +12,10 @@ import {
 import { JobService } from './job.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
-import { Roles } from 'src/user/decorator/roles.decorator';
-import { Role } from 'src/user/entities/role.enum';
-import { AuthGuard } from 'src/guard/authguard';
-import { RolesGuard } from 'src/guard/RolesGuard';
+import { Roles } from '../auth/decorator/roles.decorator';
+import { Role } from '../auth/entities/role.enum';
+import { AuthGuard } from 'src/module/auth/guard/authguard';
+import { RolesGuard } from 'src/module/auth/guard/RolesGuard';
 
 @Controller('job')
 export class JobController {
@@ -35,8 +35,8 @@ export class JobController {
   assignJob(
     @Param('jobId') jobId: string,
     @Param('vendorId') vendorId: string,
-    @Param("proposalId") proposalId:string
+    @Param('proposalId') proposalId: string,
   ) {
-    return this.jobService.assignedJob(jobId, vendorId,proposalId);
+    return this.jobService.assignedJob(jobId, vendorId, proposalId);
   }
 }

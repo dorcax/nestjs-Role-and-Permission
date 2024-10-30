@@ -66,6 +66,7 @@ try {
   })
   console.log(res.data)
   toast.success(res.data.message)
+  localStorage.setItem("token",JSON.stringify(res.data.token))
    return res.data
 } catch (error) {
   const errorMessage = error.response?.data?.message || error.message;
@@ -127,7 +128,7 @@ const authSlice = createSlice({
         state.userInfo=action.payload.user
         state.token =action.payload.token
         state.isAuthenticated=true
-        state.loading=true
+        state.loading=false
         localStorage.setItem("token",JSON.stringify(action.payload.token))
         localStorage.setItem("userInfo",JSON.stringify(action.payload.user))
       })
