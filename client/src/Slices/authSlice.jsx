@@ -19,8 +19,8 @@ import { toast } from 'react-toastify'
 // };
 
 const initialState={
-  userInfo:null,
-  token:null,
+  userInfo:localStorage.getItem("userInfo")?JSON.parse(localStorage.getItem("token")) :null,
+  token:localStorage.getItem("token")?JSON.parse(localStorage.getItem("token")):null,
   isAuthenticated: false,
   error: null,
   loading: false,

@@ -24,14 +24,15 @@ export class VendorService {
           },
         },
       });
-      return { message: ' vendor registered successfully', vendor };
+      return { message: ' vendor regisccestered susfully', vendor };
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
   }
 
   // verify user by admin
-  async verifyVendor(vendorId: string) {
+  async verifyVendor(vendorId: string,VerifyVendorDto) {
+    const{isApproved} =VerifyVendorDto
     try {
       // find the user to verify
       const vendor = await this.prisma.vendor.findUnique({
@@ -48,11 +49,11 @@ export class VendorService {
           id: vendorId,
         },
         data: {
-          isApproved: true,
+          isApproved:isApproved
         },
       });
 
-      return { vendor: updatedVendor };
+      return updatedVendor ;
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
@@ -62,15 +63,13 @@ export class VendorService {
 
   async fetchVendors() {
     try {
-      const vendors = await this.prisma.vendor.findMany({
+      const vendor = await this.prisma.vendor.findMany({
         include: {
           proposal: true,
           user: true,
         },
       });
-      return {
-        vendor: vendors,
-      };
+      return  vendor;    
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
@@ -78,24 +77,44 @@ export class VendorService {
  
   // filter vendor  
 
-  async filterVendor(isApproved:boolean,searchTerm:string){
+  async filterVendor(isApproved:boolean,searchTerm:string,sortBy:string){
     try {
-     if(isApproved !=undefined){
-      const vendor =await this.prisma.vendor.findMany({where:{isApproved}})
-     }
-     if(searchTerm){
       const vendor =await this.prisma.vendor.findMany({
         where:{
-          businessName:{
-            contains:searchTerm,
-            mode:"insensitive"
-          }
+          OR:[
+            {isApproved},
+            {businessName:{
+              contains:searchTerm,
+              mode:"insensitive"
+            }},
+         
+          ],
+          
         }
+        // ,
+        // orderBy:{
+        //     businessName:sortBy
+        // }
       })
-     }
-      
+      return vendor
     } catch (error) {
       throw new InternalServerErrorException(error.messgae)
+    }
+
+  }
+
+
+  // fetch each vendor 
+  async fetchVendor(vendorId:string){
+    try {
+      const vendor =await this.prisma.vendor.findUnique({
+        where:{
+          id:vendorId
+      }
+    })
+    return {vendor:vendor}
+    } catch (error) {
+      throw new InternalServerErrorException(error.message)
     }
 
   }

@@ -11,7 +11,7 @@ import {
   Query
 } from '@nestjs/common';
 import { VendorService } from './vendor.service';
-import { CreateVendorDto } from './dto/create-vendor.dto';
+import { CreateVendorDto, VerifyVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
 import { RolesGuard } from 'src/module/auth/guard/RolesGuard';
 import { AuthGuard } from 'src/module/auth/guard/authguard';
@@ -35,8 +35,9 @@ export class VendorController {
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
   @Patch(':vendorId')
-  verifyUser(@Param('vendorId') vendorId: string) {
-    return this.vendorService.verifyVendor(vendorId);
+  verifyUser(@Param('vendorId') vendorId: string,@Body() VerifyVendorDto:VerifyVendorDto) {
+    // const approvedStatus =isApproved===true
+    return this.vendorService.verifyVendor(vendorId,VerifyVendorDto);
   }
 
   // fetch all vendor 
@@ -51,9 +52,19 @@ export class VendorController {
   @UseGuards(AuthGuard,RolesGuard)
   @Get("filterVendor")
   filterVendor(@Query("isApproved") isApproved:string,
-               @Query("searchTerm") searchTerm:string){
+               @Query("searchTerm") searchTerm:string,
+              @Query("sortBy") sortBy:string){
     const approvedStatus =isApproved==="true"
-    return this.vendorService.filterVendor(approvedStatus)
+    return this.vendorService.filterVendor(approvedStatus,searchTerm,sortBy)
+
+  }
+
+
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Get(":vendorId")
+  fetchVendor(@Param("vendorId") vendorId:string){
+    return this.vendorService.fetchVendor(vendorId)
 
   }
 }

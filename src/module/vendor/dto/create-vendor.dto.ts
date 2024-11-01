@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from "class-validator"
+import { IsNotEmpty, IsString ,IsBoolean} from "class-validator"
 
 export class CreateVendorDto {
     @IsNotEmpty()
@@ -13,3 +13,8 @@ export class CreateVendorDto {
     @IsString()
     businessAddress:string
 }
+
+export class VerifyVendorDto {
+    @IsBoolean()
+    isApproved: boolean;
+  }
