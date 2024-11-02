@@ -118,5 +118,61 @@ export class VendorService {
     }
 
   }
+//  statistic for total vendor ,job,user,proposal,assignedJob,approved vendor
+
+async getStatistic(){
+  try {
+    console.log("Starting getStatistics");
+
+    const totalVendors = await this.prisma.vendor.count();
+    console.log("Total Vendors:", totalVendors);
+
+    const totalUsers = await this.prisma.user.count();
+    console.log("Total Users:", totalUsers);
+
+    const totalProposals = await this.prisma.proposal.count();
+    console.log("Total Proposals:", totalProposals);
+
+    const totalJobs = await this.prisma.job.count();
+    console.log("Total Jobs:", totalJobs);
+
+    const assignedJobs = await this.prisma.assignedJob.count();
+    console.log("Assigned Jobs:", assignedJobs);
+
+    const approvedVendors = await this.prisma.vendor.count({
+      where: { isApproved: true },
+    });
+    console.log("Approved Vendors:", approvedVendors);
+
+    const pendingVendors = await this.prisma.vendor.count({
+      where: { isApproved: false },
+    });
+    console.log("Pending Vendors:", pendingVendors);
+
+    const vendors = await this.prisma.vendor.findMany({
+      select: { isApproved: true },
+    });
+    console.log("Sample Vendors:", vendors);
+
+    return {
+      statistics: {
+        totalVendors,
+        totalUsers,
+        totalProposals,
+        totalJobs,
+        assignedJobs,
+        approvedVendors,
+        pendingVendors,
+        vendors,
+      },
+    };
+  } catch (error) {
+    console.error("Error in getStatistics:", error.message);
+    throw new InternalServerErrorException(error.message);
+  }
+}
+
+
+
 
 }

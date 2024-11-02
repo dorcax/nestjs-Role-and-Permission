@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchVendors } from '../../Slices/vendorSlice';
 import VendorTable from './VendorTable';
+import GetStatistic from './GetStatistic';
 
 const Vendor = () => {
   const dispatch = useDispatch();
@@ -37,14 +38,8 @@ const Vendor = () => {
     <section className="relative bg-gray-100 min-h-screen">
       <div className="container mx-auto px-8 py-10">
         <div className="flex flex-wrap gap-10 justify-start py-2 w-full">
-          {[...Array(4)].map((_, index) => (
-            <div
-              key={index}
-              className="border-2 w-[220px] bg-white shadow-lg h-[100px] rounded-md flex items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out"
-            >
-              <span className="text-lg font-medium">Vendor {index + 1}</span>
-            </div>
-          ))}
+          
+          <GetStatistic/>
         </div>
         {/* table */}
         <div>

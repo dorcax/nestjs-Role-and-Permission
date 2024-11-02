@@ -10,6 +10,7 @@ import Proposal from './section/proposal/Proposal.jsx';
 import Job from './section/job/Job.jsx';
 import Modal from './component/Modal.jsx';
 import ViewVendor from './section/vendor/ViewVendor.jsx';
+import User from './section/user/User.jsx';
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
     children: [
       {
         index:true,
-        element: <Vendor />
+        element: <User />
       },
       {
         path: 'proposal',
@@ -44,6 +45,9 @@ const router = createBrowserRouter([
       {
         path:"vendorview",
         element:<ViewVendor/>
+      },{
+        path:"vendor",
+        element:<Vendor />
       }
     ],
   },

@@ -59,7 +59,7 @@ export class VendorController {
 
   }
 
-
+// fetch vendor 
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard,RolesGuard)
   @Get(":vendorId")
@@ -67,4 +67,13 @@ export class VendorController {
     return this.vendorService.fetchVendor(vendorId)
 
   }
+
+// get dasboard statistics
+  // @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard)
+    @Get()
+    getStatistic() {
+        console.log("Fetching vendor statistics");
+        return this.vendorService.getStatistic();
+    }
 }

@@ -80,7 +80,7 @@ const VendorTable = () => {
                       {vendorItem.businessAddress}
                     </td>
                     <td className="px-3 py-4 text-gray-700">
-                      {vendorItem.isApproved ? 'Yes' : 'No'}
+                      {vendorItem.isApproved ? 'true' : 'false'}
                     </td>
                     <td>
                     <button className=' px-4 py-2 rounded-md capitalize bg-blue-800 text-white hover:bg-blue-600 transition-all' onClick={()=>handleChange(vendorItem)}>view</button>

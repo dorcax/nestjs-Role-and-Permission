@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet,Link } from 'react-router-dom';
 const Dashboard = () => {
   return (
     <section className=" bg-gray-200 w-full min-h-screen ">
@@ -8,8 +8,12 @@ const Dashboard = () => {
         <h2 className="text-white text-lg text-center py-2">VMS Dashboard</h2>
         <nav className="mt-4 text-center">
             <ul>
-              <li className="text-white hover:bg-blue-800 p-4 rounded">Users</li>
-              <li className="text-white hover:bg-blue-800 p-4 rounded">Vendor</li>
+              <li className="text-white hover:bg-blue-800 p-4 rounded">
+                <Link to="/dashboard">User</Link>
+              </li>
+              <li className="text-white hover:bg-blue-800 p-4 rounded">
+                <Link to="/dashboard/vendor">Vendor</Link>
+              </li>
               <li className="text-white hover:bg-blue-800 p-4 rounded">Proposal</li>
               <li className="text-white hover:bg-blue-800 p-4 rounded">Job listing</li>
               <li className="text-white hover:bg-blue-800 p-4 rounded">Payment</li>
