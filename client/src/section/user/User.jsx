@@ -1,8 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { fetchVendors } from '../../Slices/vendorSlice';
-// import VendorTable from '.././VendorTable';
+import UserTable from './UserTable';
 import GetStatistic from '../vendor/GetStatistic';
 
 const User = () => {
@@ -64,7 +63,8 @@ const User = () => {
               </div>
             </div>
             <div className="overflow-auto mt-6">
-              {/* <VendorTable/> */}
+              
+              <UserTable />
             </div>
           </div>
         </section>
