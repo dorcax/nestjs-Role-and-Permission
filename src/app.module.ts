@@ -11,6 +11,7 @@ import { ProposalModule } from '../src/module/proposal/proposal.module';
 import { VendorModule } from '../src/module/vendor/vendor.module';
 // import { AuthResolver } from './module/auth/auth.resolver';
 import { AuthModule } from './module/auth/auth.module';
+import { UserModule } from './user/user.module';
 import 'dotenv/config';
 
 @Module({
@@ -27,6 +28,7 @@ import 'dotenv/config';
     ProposalModule,
     VendorModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

@@ -39,18 +39,7 @@ const User = () => {
                   </span>
                 </div>
     
-                <select
-                  name=""
-                  id="filter"
-                  className="w-[200px] rounded-md outline-none "
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                >
-                  <option value="">select status</option>
-                  <option value="approved">approved</option>
-                  <option value="pending">pending</option>
-                  <option value="all">all</option>
-                </select>
+                
     
                 
                   <select name="" id="" className='w-[200px] rounded-md outline-none' value={sortBy} onChange={(e)=>setSortBy(e.target.value)}>
@@ -61,6 +50,7 @@ const User = () => {
                   </select>
                 
               </div>
+              <div>buttin</div>
             </div>
             <div className="overflow-auto mt-6">
               
