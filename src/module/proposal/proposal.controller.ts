@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ProposalService } from './proposal.service';
-import { CreateProposalDto } from './dto/create-proposal.dto';
+import { ApproveProposalDto, CreateProposalDto } from './dto/create-proposal.dto';
 import { UpdateProposalDto } from './dto/update-proposal.dto';
 import { Roles } from '../auth/decorator/roles.decorator';
 import { Role } from '../auth/entities/role.enum';
@@ -39,11 +39,18 @@ export class ProposalController {
   // approve the proposal
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
-  @Patch('verify/:vendorId/:proposalId')
+  @Patch('approve/:vendorId/:proposalId')
   verifyProposal(
     @Param('vendorId') vendorId: string,
     @Param('proposalId') proposalId: string,
+    @Body() approveProposalDto:ApproveProposalDto
   ) {
-    return this.proposalService.verifyProposal(vendorId, proposalId);
+    return this.proposalService.verifyProposal(vendorId, proposalId,approveProposalDto);
+  }
+
+
+  @Get("getProposals")
+  findProposal(){
+    return this.proposalService.findProposals()
   }
 }

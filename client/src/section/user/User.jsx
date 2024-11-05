@@ -21,7 +21,7 @@ const User = () => {
             {/* table */}
             <div>
               <h1 className="text-md font-semibold text-gray-800 py-4 capitalize">
-                All Vendors
+                All Users
               </h1>
               <div className="flex gap-6 justify-start">
                 <div className="relative">

@@ -7,7 +7,7 @@ const Modal = ({open,title,children,setIsOpen}) => {
       <div className=' w-[400px] bg-white shadow-xl text-black font-bold opacity none  rounded-md px-4 py-4'>
         <div className='flex justify-between items-center border-b-2'>
           <h2 className='text-lg capitalize font-semibold'>{title}</h2>
-          <button className='text-xl text-red-600'onClick={()=>setIsOpen(false)} > &times;</button>
+          {/* <button className='text-xl text-red-600'onClick={()=>setIsOpen(false)} > &times;</button> */}
         </div>
         <div className='p-4'>
           {children}

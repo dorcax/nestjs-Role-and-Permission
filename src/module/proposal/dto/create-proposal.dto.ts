@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from "class-validator"
+import { IsNotEmpty, IsString,IsBoolean } from "class-validator"
 
 export class CreateProposalDto {
     @IsString()
@@ -8,3 +8,7 @@ export class CreateProposalDto {
     @IsNotEmpty()
     price:number
 }
+export class ApproveProposalDto {
+    @IsBoolean()
+    isApproved: boolean;
+  }

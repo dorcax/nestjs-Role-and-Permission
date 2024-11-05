@@ -14,7 +14,7 @@ const Dashboard = () => {
               <li className="text-white hover:bg-blue-800 p-4 rounded">
                 <Link to="/dashboard/vendor">Vendor</Link>
               </li>
-              <li className="text-white hover:bg-blue-800 p-4 rounded">Proposal</li>
+              <li className="text-white hover:bg-blue-800 p-4 rounded"><Link to="/dashboard/proposal">Proposal</Link></li>
               <li className="text-white hover:bg-blue-800 p-4 rounded">Job listing</li>
               <li className="text-white hover:bg-blue-800 p-4 rounded">Payment</li>
               <li className="text-white hover:bg-blue-800 p-4 rounded">Setting</li>
@@ -46,7 +46,8 @@ const Dashboard = () => {
               />
             </div>
           </div>
-          <div><Outlet/></div>
+          <div>
+        <Outlet/></div>
         </div>
       </div>
     </section>

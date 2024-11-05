@@ -60,30 +60,103 @@ export class ProposalService {
     return { messsage: 'proposal create successfully', proposal };
   }
 
-  async verifyProposal(vendorId: string, proposalId: string) {
-    const proposal = await this.prisma.vendor.findFirst({
-      where: {
-        id: vendorId,
-        isApproved: true,
-        proposal: {
-          some: {
-            id: proposalId,
-          },
-        },
-      },
-    });
-    if (!proposal) {
-      throw new NotFoundException('proposal id not found');
+  // async verifyProposal(vendorId: string, proposalId: string,approveProposalDto) {
+  //   try {
+  //     const {isApproved} =approveProposalDto
+  //   const proposal = await this.prisma.vendor.findFirst({
+  //     where: {
+  //       id: vendorId,
+  //       isApproved: true,
+  //       proposal: {
+  //         some: {
+  //           id: proposalId,
+  //         },
+  //       },
+  //     },
+  //   });
+  //   if (!proposal) {
+  //     throw new NotFoundException('Vendor not found or not approved for the proposal');
+  // }
+  //   // update the proposal approval
+  //   const proposalStatus = await this.prisma.proposal.update({
+  //     where: {
+  //       id: proposalId,
+  //     },
+  //     data: {
+  //       isApproved
+  //     },
+  //   });
+  //   // const message = isApproved 
+  //   // ? 'Proposal approved successfully' 
+  //   // : 'Proposal rejected successfully';
+  //   return proposalStatus 
+  //   } catch (error) {
+  //     throw new InternalServerErrorException(error.message)
+     
+  //   }
+  // }
+  async verifyProposal(vendorId: string, proposalId: string, approveProposalDto) {
+    try {
+        const { isApproved } = approveProposalDto;
+
+        // Find the proposal to check its current status
+        const proposal = await this.prisma.proposal.findUnique({
+            where: {
+                id: proposalId,
+            },
+        });
+
+        if (!proposal) {
+            throw new NotFoundException('Proposal not found');
+        }
+
+        // Check if the vendor is approved
+        const vendor = await this.prisma.vendor.findMany({
+            where: {
+                id: vendorId,
+                isApproved: true,
+            },
+        });
+
+        if (!vendor) {
+            throw new NotFoundException('Vendor not found or not approved for the proposal');
+        }
+
+        // Update the proposal approval status
+        const proposalStatus = await this.prisma.proposal.update({
+            where: {
+                id: proposalId,
+            },
+            data: {
+                isApproved,
+            },
+            include:{
+              job:true,
+              vendor:true
+            }
+        });
+
+        return proposalStatus;
+
+    } catch (error) {
+        throw new InternalServerErrorException(error.message);
     }
-    // update the proposal approval
-    const proposalStatus = await this.prisma.proposal.update({
-      where: {
-        id: proposalId,
-      },
-      data: {
-        isApproved: true,
-      },
-    });
-    return { message: 'proposal approved successfully', proposalStatus };
+}
+
+
+  // find many proposal
+  async findProposals() {
+    try {
+      const proposals = await this.prisma.proposal.findMany({
+        include:{
+          vendor:true,
+          job:true,
+          assigned:true
+        }
+      });
+      return proposals;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }

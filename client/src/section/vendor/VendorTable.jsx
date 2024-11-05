@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import{Link } from"react-router-dom"
 import ViewVendor from './ViewVendor';
+import clsx from "clsx"
 import { approveVendor } from '../../Slices/vendorSlice';
 const VendorTable = () => {
     const { loading, error, vendor } = useSelector((state) => state.vendor);
@@ -79,8 +80,8 @@ const VendorTable = () => {
                     <td className="px-3 py-4 text-gray-700">
                       {vendorItem.businessAddress}
                     </td>
-                    <td className="px-3 py-4 text-gray-700">
-                      {vendorItem.isApproved ? 'true' : 'false'}
+                    <td className={clsx("px-3 py-4 text-gray-700 capitalize", vendorItem?.isApproved ? 'text-blue-800' : 'text-red-500')}>
+                      {vendorItem.isApproved ? 'approved' : 'Not approved'}
                     </td>
                     <td>
                     <button className=' px-4 py-2 rounded-md capitalize bg-blue-800 text-white hover:bg-blue-600 transition-all' onClick={()=>handleChange(vendorItem)}>view</button>
