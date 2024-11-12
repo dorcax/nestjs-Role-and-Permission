@@ -156,6 +156,7 @@ const ProposalTable = () => {
     setStatus(status);
     handleApproval(status, vendorId, proposalId);
   };
+  
 
   return (
     <div>

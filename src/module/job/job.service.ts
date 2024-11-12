@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { CreateJobDto } from './dto/create-job.dto';
 import { PrismaService } from 'src/prisma.service';
+import { UpdateJobDto } from './dto/update-job.dto';
 
 @Injectable()
 export class JobService {
@@ -98,5 +99,101 @@ export class JobService {
       }
     })
     return {message:"job assigned successfully",assignJob}
+  }
+
+
+  // ffind all jobs
+  async findAllJobs(){
+    try {
+      const jobs =await this.prisma.job.findMany({
+        include:{
+          createdBy:true,
+          proposal:true,
+          assigned:true
+        }
+      })
+      return jobs
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
+  }
+
+  // find Job with unique id 
+  async findJobProposal(jobId: string) {
+    try {
+      const job = await this.prisma.job.findUnique({
+        where: {
+          id: jobId
+        },
+        include: {
+          proposal: {
+            include: {
+              vendor: true // Include the vendor details for each proposal
+            }
+          }
+        }
+      });
+  
+      if (!job) {
+        throw new Error('Job not found');
+      }
+  
+      return job;
+    } catch (error) {
+      throw new Error('Failed to retrieve proposals: ' + error.message);
+    }
+  }
+  
+  // EDIT JOB 
+  async EditJobs(updateJobDto:UpdateJobDto,jobId){
+    try {
+      const {title,description,price} =updateJobDto
+      const job =await this.prisma.job.findUnique({
+ where:{
+  id:jobId
+ }
+      })
+      if (!job) {
+         throw new NotFoundException( 'Job not found' );
+      }
+      const updateJob =await this.prisma.job.update({
+        where:{
+          id:jobId
+        },
+        data:{
+          title,
+          description,
+          price
+        }
+      })
+      return updateJob
+    } catch (error) {
+      throw new  InternalServerErrorException(error.message)
+    }
+
+  }
+
+  // delete job
+
+  async deleteJob (jobId){
+    try {
+      const findJob =await this.prisma.job.findUnique({
+        where:{
+          id:jobId
+        }
+      })
+      if(!findJob){
+        throw new NotFoundException( 'Job not found' );
+      }
+      const deleteJob =await this.prisma.job.delete({
+        where:{
+          id:jobId
+        }
+      })
+      return deleteJob
+    } catch (error) {
+      throw new InternalServerErrorException(error.message)
+    }
+
   }
 }

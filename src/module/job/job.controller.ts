@@ -39,4 +39,35 @@ export class JobController {
   ) {
     return this.jobService.assignedJob(jobId, vendorId, proposalId);
   }
+
+
+  // find all jobs 
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get("jobs")
+  findJobs(){
+   return this.jobService.findAllJobs()
+  }
+  // find job with thier proposal 
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get("proposal/:jobId")
+  findJob(@Param("jobId") jobId:string){
+   return this.jobService.findJobProposal(jobId)
+  }
+  // edit job
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Patch("edit/:jobId")
+  EditJob (@Param("jobId") jobId:string,
+@Body() updateJobDto:UpdateJobDto){
+    return this.jobService.EditJobs(updateJobDto,jobId)
+  }
+  // delete job
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Delete("delete/:jobId")
+  DeleteJob(@Param("jobId") jobId:string){
+    return this.jobService.deleteJob(jobId)
+  }
 }

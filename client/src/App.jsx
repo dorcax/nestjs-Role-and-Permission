@@ -11,6 +11,7 @@ import Job from './section/job/Job.jsx';
 import Modal from './component/Modal.jsx';
 import ViewVendor from './section/vendor/ViewVendor.jsx';
 import User from './section/user/User.jsx';
+import ViewJobProposals from './section/job/ViewJobProposals.jsx';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,9 @@ const router = createBrowserRouter([
       },{
         path:"vendor",
         element:<Vendor />
+      },{
+        path:"viewjob/:jobId",
+        element:<ViewJobProposals/>
       }
     ],
   },
