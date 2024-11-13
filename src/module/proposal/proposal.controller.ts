@@ -48,9 +48,10 @@ export class ProposalController {
     return this.proposalService.verifyProposal(vendorId, proposalId,approveProposalDto);
   }
 
-
-  @Get("getProposals")
-  findProposal(){
-    return this.proposalService.findProposals()
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get("getProposals/:jobId")
+  findProposal(@Param("jobId") jobId:string){
+    return this.proposalService.findProposals(jobId)
   }
 }

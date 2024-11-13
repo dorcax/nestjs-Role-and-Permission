@@ -121,7 +121,7 @@ export class JobService {
   // find Job with unique id 
   async findJobProposal(jobId: string) {
     try {
-      const job = await this.prisma.job.findUnique({
+      const job = await this.prisma.job.findMany({
         where: {
           id: jobId
         },

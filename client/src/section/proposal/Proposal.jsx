@@ -1,14 +1,14 @@
 import {React,useState,useEffect} from 'react'
 import GetStatistic from '../vendor/GetStatistic';
 import ProposalTable from './ProposalTable';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 
 import { fetchProposal } from '../../Slices/proposalSlice';
 const Proposal = () => {
 
     const dispatch = useDispatch();
     // const { token } = useSelector((state) => state.auth);
-    // const { loading, error, vendor } = useSelector((state) => state.vendor);
+    const { loading, error, vendor } = useSelector((state) => state.vendor);
     const [filter, setFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy,setSortBy] =useState("")

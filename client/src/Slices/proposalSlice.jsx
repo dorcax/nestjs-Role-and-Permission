@@ -9,12 +9,12 @@ const initialState = {
 
 export const fetchProposal = createAsyncThunk(
   'fetch/proposal',
-  async (_, thunkAPI) => {
+  async (jobId, thunkAPI) => {
     const state = thunkAPI.getState();
     const token = state.auth.token;
     try {
       const res = await axios.get(
-        'http://localhost:3000/proposal/getProposals',
+        `http://localhost:3000/proposal/getProposals/${jobId}`,
         {
           headers: {
             'Content-Type': 'application/json',

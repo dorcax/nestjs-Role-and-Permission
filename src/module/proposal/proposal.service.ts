@@ -60,41 +60,7 @@ export class ProposalService {
     return { messsage: 'proposal create successfully', proposal };
   }
 
-  // async verifyProposal(vendorId: string, proposalId: string,approveProposalDto) {
-  //   try {
-  //     const {isApproved} =approveProposalDto
-  //   const proposal = await this.prisma.vendor.findFirst({
-  //     where: {
-  //       id: vendorId,
-  //       isApproved: true,
-  //       proposal: {
-  //         some: {
-  //           id: proposalId,
-  //         },
-  //       },
-  //     },
-  //   });
-  //   if (!proposal) {
-  //     throw new NotFoundException('Vendor not found or not approved for the proposal');
-  // }
-  //   // update the proposal approval
-  //   const proposalStatus = await this.prisma.proposal.update({
-  //     where: {
-  //       id: proposalId,
-  //     },
-  //     data: {
-  //       isApproved
-  //     },
-  //   });
-  //   // const message = isApproved 
-  //   // ? 'Proposal approved successfully' 
-  //   // : 'Proposal rejected successfully';
-  //   return proposalStatus 
-  //   } catch (error) {
-  //     throw new InternalServerErrorException(error.message)
-     
-  //   }
-  // }
+  
   async verifyProposal(vendorId: string, proposalId: string, approveProposalDto) {
     try {
         const { isApproved } = approveProposalDto;
@@ -145,9 +111,12 @@ export class ProposalService {
 
 
   // find many proposal
-  async findProposals() {
+  async findProposals(jobId:string) {
     try {
       const proposals = await this.prisma.proposal.findMany({
+        where:{
+          jobId:jobId
+        },
         include:{
           vendor:true,
           job:true,

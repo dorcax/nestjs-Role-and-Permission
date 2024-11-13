@@ -43,6 +43,7 @@ export const fetchJobs =createAsyncThunk("fetch/jobs",async(_,thunkAPI)=>{
         return  thunkAPI.rejectWithValue(errorMessage)
     }
 })
+
 // find job with proposals 
 export const findJob =createAsyncThunk("job/proposal",async(jobId,thunkAPI)=>{
     try {
@@ -152,6 +153,7 @@ const jobSlice =createSlice({
             state.loading=false
             state.error =action.payload
         })
+       
         // edit job
         .addCase(editJob.pending,(state)=>{
             state.loading=true
@@ -189,6 +191,7 @@ const jobSlice =createSlice({
             state.loading=false
             state.error =action.payload
         })
+
     }
 })
 
