@@ -84,6 +84,25 @@ export const editJob =createAsyncThunk("edit/jobs",async({formData,jobId},thunkA
  })
 
 
+// assign job to vendor 
+export const assignJob =createAsyncThunk("assign/job",async({isAssigned,jobId,vendorId,proposalId},thunkAPI)=>{
+    try {
+        const state =thunkAPI.getState()
+        const token =state.auth.token
+        const res = await axios.patch(`http://localhost:3000/job/assignJob/${jobId}/${vendorId}/${proposalId}`,{isAssigned},{
+            headers:{
+                "Content-Type":"application/json",
+                Authorization:`Bearer ${token}`
+            }
+        })
+        toast.success("job is assigned to vendor successfully")
+        return res.data
+    } catch (error) {
+        let errorMessage =error.response?.data?.message ||error.message
+        console.log(errorMessage)
+        return  thunkAPI.rejectWithValue(errorMessage)
+    }
+ })
 
 //  delete job
 export const deleteJob =createAsyncThunk("delete/job",async(jobId,thunkAPI)=>{
@@ -153,26 +172,67 @@ const jobSlice =createSlice({
             state.loading=false
             state.error =action.payload
         })
-       
-        // edit job
-        .addCase(editJob.pending,(state)=>{
+
+
+    .addCase(editJob.pending,(state)=>{
+        state.loading=true
+        state.error=null
+    })
+    .addCase(editJob.fulfilled,(state,action)=>{
+        state.loading=false
+       const  updatedJob= action.payload
+        state.jobs=state.jobs.map((jobItem)=>{
+            if(jobItem && jobItem.id ===updatedJob.id){
+                return updatedJob
+            }
+            else{
+                return jobItem
+            }
+        })
+        state.error =null
+    })
+    .addCase(editJob.rejected,(state,action)=>{
+        state.loading=false
+        state.error =action.payload
+    })
+    //    assign job to vendor
+        .addCase(assignJob.pending,(state)=>{
             state.loading=true
             state.error=null
         })
-        .addCase(editJob.fulfilled,(state,action)=>{
-            state.loading=false
-           const  updatedJob= action.payload
-            state.jobs=state.jobs.map((jobItem)=>{
-                if(jobItem && jobItem.id ===updatedJob.id){
-                    return updatedJob
-                }
-                else{
-                    return jobItem
-                }
-            })
-            state.error =null
+        .addCase(assignJob.fulfilled,(state,action)=>{
+        //     state.loading=false
+        //    const  assignedJob= action.payload
+        //     state.jobs=state.jobs.map((job)=>{
+        //         if(job.id ===assignJob.id){
+        //     job.proposals =   job.proposals.map((proposalItem)=>(
+        //         proposalItem&& proposalItem.id ===assignedJob.proposal.id
+        //        ?assignedJob :proposalItem
+        //        ))
+        //     }
+        //     })
+        //     state.error =null
+
+            state.loading = false;
+  const assignedJob = action.payload;
+
+  state.jobs = state.jobs.map((job) => {
+    if (job.id === assignedJob.id) {
+      // Assign the job to the specified vendor and update proposals
+      job.assignedVendor = assignedJob.vendorId; // assuming `vendorId` is part of the payload
+      job.isAssigned = true; // Flag to show job is assigned
+
+      job.proposals = job.proposals.map((proposalItem) =>
+        proposalItem && proposalItem.id === assignedJob.proposal.id
+          ? { ...proposalItem, status: 'Assigned' } // Mark proposal as assigned
+          : proposalItem
+      );
+    }
+    return job;
+       
         })
-        .addCase(editJob.rejected,(state,action)=>{
+    })
+        .addCase(assignJob.rejected,(state,action)=>{
             state.loading=false
             state.error =action.payload
         })

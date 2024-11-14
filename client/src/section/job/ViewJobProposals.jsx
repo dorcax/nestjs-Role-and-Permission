@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { findJob } from '../../Slices/jobSlice';
+import { assignJob, findJob } from '../../Slices/jobSlice';
 import { useParams } from 'react-router-dom';
 import { approveProposal } from '../../Slices/proposalSlice';
 import { fetchProposal } from '../../Slices/proposalSlice';
@@ -10,58 +10,75 @@ const ViewJobProposals = () => {
   const dispatch = useDispatch();
   const { jobId } = useParams();
   const { proposals } = useSelector((state) => state.proposal);
-  const {jobs} =useSelector((state)=>state.job)
+  const { jobs } = useSelector((state) => state.job);
   const job = jobs.find((job) => job.id === jobId);
-     
+
   useEffect(() => {
     dispatch(findJob(jobId)); 
     dispatch(fetchProposal(jobId)); 
-  }, [dispatch]);
+  }, [dispatch, jobId]);
 
   const handleApproval = (status, vendorId, proposalId) => {
     const isApproved = status === "approve";
     dispatch(approveProposal({ vendorId, proposalId, isApproved }));
   };
-  console.log('Job details:', jobs)
+
+  const handleAssignedJob =(status,vendorId,proposalId,jobId)=>{
+    console.log('Vendor ID:', vendorId)
+ const isAssigned =status==="assign"
+dispatch(assignJob({jobId,vendorId,proposalId,isAssigned}))
+  
+
+
+}
 
   return (
-    <div className="overflow-auto mt-6">
-         <h2 className="text-2xl font-semibold mb-4 capitalize text-blue-800 text-center"> {job.title}</h2>
-         {proposals.length > 0 ?   <table className="border-2 w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
-        <thead>
-          <tr className="text-gray-900 text-left">
-            <th className="px-3 py-4 capitalize tracking-wider">Proposal Title</th>
-            <th className="px-3 py-4 capitalize tracking-wider">Description</th>
-            <th className="px-3 py-4 capitalize tracking-wider">Price</th>
-            <th className="px-3 py-4 capitalize tracking-wider">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(proposals) &&proposals.length > 0 && proposals.map((proposalItem) => (
-            <tr key={proposalItem.id} className="border-b-2 hover:bg-gray-100 transition-all text-sm">
-              <td className="px-3 py-4">{proposalItem.description}</td>
-              <td className="px-3 py-4">{proposalItem.price}</td>
-              <td className="px-3 py-4">
-                {proposalItem.isApproved ? 'Approved' : 'Not Approved'}
-              </td>
-              <td>
-                <select
-                  className="border2 px-3 py-2 outline-none rounded-lg"
-                  onChange={(e) => handleApproval(e.target.value, proposalItem.vendor.id, proposalItem.id)}
-                >
-                  <option value="" disabled>Status</option>
-                  <option value="approve">Approve</option>
-                  <option value="reject">Reject</option>
-                </select>
-              </td>
+    <div className="overflow-auto mt-6 px-4">
+      <h2 className="text-3xl font-semibold mb-6 text-blue-800 text-center">{job?.title || 'Job Title'}</h2>
+
+      {proposals.length > 0 ? (
+        <table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden border-separate border-spacing-0">
+          <thead>
+            <tr className="bg-gray-200 text-gray-900 text-left">
+              <th className="px-4 py-3 font-medium text-sm text-gray-700">Description</th>
+              <th className="px-4 py-3 font-medium text-sm text-gray-700">Price</th>
+              <th className="px-4 py-3 font-medium text-sm text-gray-700">Status</th>
+              <th className="px-4 py-3 font-medium text-sm text-gray-700">Approve Proposal</th>
+              <th className="px-4 py-3 font-medium text-sm text-gray-700">Assign Job</th>
             </tr>
-          ))}
-        </tbody>
-      </table>:<div className='text-center'>no proposals found</div>}
-    
+          </thead>
+          <tbody>
+            {Array.isArray(proposals) && proposals.map((proposalItem) => (
+              <tr key={proposalItem.id} className="border-b hover:bg-gray-50 text-sm">
+                <td className="px-4 py-3">{proposalItem.description}</td>
+                <td className="px-4 py-3">${proposalItem.price}</td>
+                <td className="px-4 py-3">{proposalItem.isApproved ? 'Approved' : 'Not Approved'}</td>
+                <td className="px-4 py-3">
+                  <select
+                    className="px-3 py-2 border rounded-lg outline-none"
+                    onChange={(e) => handleApproval(e.target.value, proposalItem.vendor.id, proposalItem.id)}
+                  >
+                    <option value="" disabled>Status</option>
+                    <option value="approve">Approve</option>
+                    <option value="reject">Reject</option>
+                  </select>
+                </td>
+                <td className="px-4 py-3">
+                  <select className="px-3 py-2 border rounded-lg outline-none" onChange={(e)=>handleAssignedJob(e.target.value,proposalItem.job.id,proposalItem.vendor.id,proposalItem.id)}>
+                    <option value="" disabled>Assign Job</option>
+                    <option value="assign">Assign Job</option>
+                    <option value="unassign">Unassign</option>
+                  </select>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="text-center text-gray-500">No proposals found</div>
+      )}
     </div>
   );
 };
 
 export default ViewJobProposals;
-

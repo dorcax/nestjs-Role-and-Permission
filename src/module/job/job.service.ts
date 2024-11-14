@@ -33,15 +33,20 @@ export class JobService {
     }
   }
 
+
+
   // ASSIGNED JOB
-  async assignedJob(jobId: string, vendorId: string, proposalId: string) {
+  async assignedJob(jobId: string, vendorId: string, proposalId: string,assignedJobDto) {
+    const{isAssigned} =assignedJobDto
     // find if vendorId exist and approved
     const vendor = await this.prisma.vendor.findUnique({
       where: {
         id: vendorId,
       },
     });
-    if (!vendor || !vendor.isApproved) {
+
+    console.log("eeeee",vendor)
+    if (!vendor) {
       throw new NotFoundException('vendor is either not approved or not found');
     }
     // find if job exist and is not assigned
@@ -88,14 +93,17 @@ export class JobService {
         },
       },
     });
-
+    console.log('Assigning job with:', { jobId, vendorId, proposalId });
+    console.log('Found vendor:', vendor);
+    console.log('Found job:', job);
+    console.log('Found proposal:', proposal);
     // update the job status
     const jobStatus =await this.prisma.job.update({
       where:{
         id:jobId
       },
       data:{
-        isAssigned:true
+        isAssigned:isAssigned
       }
     })
     return {message:"job assigned successfully",assignJob}

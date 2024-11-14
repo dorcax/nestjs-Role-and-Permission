@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator"
+import { IsNotEmpty, IsNumber, IsString,IsBoolean } from "class-validator"
 
 export class CreateJobDto {
     @IsString()
@@ -12,3 +12,7 @@ export class CreateJobDto {
     price:number
 
 }
+export class AssignedJobDto {
+    @IsBoolean()
+    isAssigned: boolean;
+  }

@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JobService } from './job.service';
-import { CreateJobDto } from './dto/create-job.dto';
+import { AssignedJobDto, CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { Roles } from '../auth/decorator/roles.decorator';
 import { Role } from '../auth/entities/role.enum';
@@ -36,8 +36,9 @@ export class JobController {
     @Param('jobId') jobId: string,
     @Param('vendorId') vendorId: string,
     @Param('proposalId') proposalId: string,
+    @Body() assignedJobDto:AssignedJobDto
   ) {
-    return this.jobService.assignedJob(jobId, vendorId, proposalId);
+    return this.jobService.assignedJob(jobId, vendorId, proposalId,assignedJobDto);
   }
 
 
