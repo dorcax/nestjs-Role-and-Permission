@@ -95,7 +95,7 @@ export const assignJob =createAsyncThunk("assign/job",async({isAssigned,jobId,ve
                 Authorization:`Bearer ${token}`
             }
         })
-        toast.success("job is assigned to vendor successfully")
+        toast.success(res.data.message)
         return res.data
     } catch (error) {
         let errorMessage =error.response?.data?.message ||error.message
@@ -201,37 +201,30 @@ const jobSlice =createSlice({
             state.error=null
         })
         .addCase(assignJob.fulfilled,(state,action)=>{
-        //     state.loading=false
-        //    const  assignedJob= action.payload
-        //     state.jobs=state.jobs.map((job)=>{
-        //         if(job.id ===assignJob.id){
-        //     job.proposals =   job.proposals.map((proposalItem)=>(
-        //         proposalItem&& proposalItem.id ===assignedJob.proposal.id
-        //        ?assignedJob :proposalItem
-        //        ))
-        //     }
-        //     })
-        //     state.error =null
+        
 
             state.loading = false;
   const assignedJob = action.payload;
 
-  state.jobs = state.jobs.map((job) => {
-    if (job.id === assignedJob.id) {
-      // Assign the job to the specified vendor and update proposals
-      job.assignedVendor = assignedJob.vendorId; // assuming `vendorId` is part of the payload
-      job.isAssigned = true; // Flag to show job is assigned
+//   state.jobs = state.jobs.map((job) => {
+//     if (job.id === assignedJob.id) {
+//       // Assign the job to the specified vendor and update proposals
+//       job.assignedVendor = assignedJob.vendorId; // assuming `vendorId` is part of the payload
+//       job.isAssigned = true; // Flag to show job is assigned
 
-      job.proposals = job.proposals.map((proposalItem) =>
-        proposalItem && proposalItem.id === assignedJob.proposal.id
-          ? { ...proposalItem, status: 'Assigned' } // Mark proposal as assigned
-          : proposalItem
-      );
-    }
-    return job;
+//       job.proposals = job.proposals.map((proposalItem) =>
+//         proposalItem && proposalItem.id === assignedJob.proposal.id
+//           ? { ...proposalItem, status: 'Assigned' } // Mark proposal as assigned
+//           : proposalItem
+//       );
+//     }
+//     return job;
        
-        })
-    })
+//         })
+state.jobs = state.jobs.map((job) =>
+    job.id === action.payload.id ? action.payload : job
+    )
+})
         .addCase(assignJob.rejected,(state,action)=>{
             state.loading=false
             state.error =action.payload

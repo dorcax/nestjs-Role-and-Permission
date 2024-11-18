@@ -31,11 +31,10 @@ const GetStatistic = () => {
             <div className="border-2 w-[220px] bg-white shadow-lg h-[100px] rounded-md flex flex-col items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out">
               Total Users <span>{statistics.totalUsers} </span>
             </div>
-            {/* <div className="border-2 w-[220px] bg-white shadow-lg h-[100px] rounded-md flex flex-col items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out">AssignedJobs <span>
-        {statistics.assignedJobs} </span>
+          
          
-        </div> */}
-          </div>
+        </div> 
+        
         ) : (
           <p>Loading statistics...</p>
         )}

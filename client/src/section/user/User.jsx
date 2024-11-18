@@ -14,7 +14,7 @@ const User = () => {
     return (
         <section className="relative bg-gray-100 min-h-screen">
           <div className="container mx-auto px-8 py-10">
-            <div className="flex flex-wrap gap-10 justify-start py-2 w-full">
+            <div>
               
               <GetStatistic/>
             </div>
@@ -23,7 +23,7 @@ const User = () => {
               <h1 className="text-md font-semibold text-gray-800 py-4 capitalize">
                 All Users
               </h1>
-              <div className="flex gap-6 justify-start">
+              <div className="flex gap-6 justify-start flex-wrap">
                 <div className="relative">
                   <input
                     type="text"
@@ -50,12 +50,11 @@ const User = () => {
                   </select>
                 
               </div>
-              <div>buttin</div>
             </div>
-            <div className="overflow-auto mt-6">
+          
               
               <UserTable />
-            </div>
+          
           </div>
         </section>
       );

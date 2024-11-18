@@ -26,7 +26,7 @@ dispatch(fetchUsers())
     });
   }
   return (
-    <div>
+    <div className="overflow-auto mt-6">
       <table className="border-2 w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden ">
         <thead>
           <tr className=" text-gray-900 text-left ">
@@ -44,19 +44,19 @@ dispatch(fetchUsers())
                 className="border-b-2 hover:bg-gray-100 transition-all text-sm"
                 key={userItem?.id}
               >
-                <td className="px-3 py-4 text-gray-700">
+                <td className="px-3 py-4 text-gray-700 whitespace-nowrap">
                   {userItem?.name}
                 </td>
-                <td className="px-3 py-4 text-gray-700">
+                <td className="px-3 py-4 text-gray-700 whitespace-nowrap">
                   {userItem?.email}
                 </td>
                 <td className="px-3 py-4 text-gray-700">
                   {userItem?.role}
                 </td>
-                <td className="px-1 py-4 text-blue-800" onClick={()=>handleUpdateChange(userItem)}>
+                <td className="px-3 md:px-1 py-4 text-blue-800" onClick={()=>handleUpdateChange(userItem)}>
                       <i class="fa-solid fa-pen"></i>
                     </td>
-                    <td className="px-1 py-4 text-red-700" onClick={()=>handleDelete(userItem.id)}>
+                    <td className="px-3 md:px-1 py-4 text-red-700" onClick={()=>handleDelete(userItem.id)}>
                       <i class="fa-solid fa-trash"></i>
                     </td>
               </tr>

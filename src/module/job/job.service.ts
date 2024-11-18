@@ -33,11 +33,15 @@ export class JobService {
     }
   }
 
-
-
   // ASSIGNED JOB
-  async assignedJob(jobId: string, vendorId: string, proposalId: string,assignedJobDto) {
-    const{isAssigned} =assignedJobDto
+  async assignedJob(
+    jobId: string,
+    vendorId: string,
+    proposalId: string,
+    assignedJobDto,
+  ) {
+   try {
+    const { isAssigned } = assignedJobDto;
     // find if vendorId exist and approved
     const vendor = await this.prisma.vendor.findUnique({
       where: {
@@ -45,7 +49,6 @@ export class JobService {
       },
     });
 
-    console.log("eeeee",vendor)
     if (!vendor) {
       throw new NotFoundException('vendor is either not approved or not found');
     }
@@ -58,150 +61,167 @@ export class JobService {
     if (!job) {
       throw new NotFoundException('job id not found');
     }
-    if (job.isAssigned) {
-      throw new BadRequestException('job is already assigned');
-    }
+
     // find if proposal exist and is approved
-    const proposal = await this.prisma.proposal.findUnique({
+    const proposal = await this.prisma.proposal.findMany({
       where: {
         id: proposalId,
       },
     });
-    if (!proposal || !proposal.isApproved) {
+    if (!proposal ) {
       throw new NotFoundException(
         'proposal id not found   proposal not approved',
       );
     }
+    console.log("pppppp",proposal)
     // assign job to the vendor
-
-    const assignJob = await this.prisma.assignedJob.create({
-      data: {
-        vendor: {
-          connect: {
-            id: vendorId,
-          },
-        },
-        job: {
-          connect: {
-            id: jobId,
-          },
-        },
-        proposal: {
-          connect: {
-            id: proposalId,
-          },
-        },
-      },
-    });
-    console.log('Assigning job with:', { jobId, vendorId, proposalId });
-    console.log('Found vendor:', vendor);
-    console.log('Found job:', job);
-    console.log('Found proposal:', proposal);
-    // update the job status
-    const jobStatus =await this.prisma.job.update({
-      where:{
-        id:jobId
-      },
-      data:{
-        isAssigned:isAssigned
+    if (isAssigned) {
+      if (job.isAssigned) {
+        throw new BadRequestException('job is already assigned');
       }
-    })
-    return {message:"job assigned successfully",assignJob}
+      const assignJob = await this.prisma.assignedJob.create({
+        data: {
+          vendor: {
+            connect: {
+              id: vendorId,
+            },
+          },
+          job: {
+            connect: {
+              id: jobId,
+            },
+          },
+          proposal: {
+            connect: {
+              id:proposal.id,
+            },
+          },
+        },
+      });
+
+      // update the job status
+      const jobStatus = await this.prisma.job.update({
+        where: {
+          id: jobId,
+        },
+        data: {
+          isAssigned: isAssigned,
+        },
+      });
+      return { message: 'job assigned successfully' };
+    } else if (!job.isAssigned) {
+      await this.prisma.assignedJob.deleteMany({
+        where: {
+          id: jobId,
+          proposalId: proposalId,
+          vendorId: vendorId,
+        },
+      });
+      await this.prisma.job.update({
+        where: {
+          id: jobId,
+        },
+        data: {
+          isAssigned: isAssigned,
+        },
+      });
+      return { message: 'Job unassigned successfully' };
+    }
+   } catch (error) {
+    throw new Error('Failed to : ' + error.message);
+   }
   }
 
-
   // ffind all jobs
-  async findAllJobs(){
+  async findAllJobs() {
     try {
-      const jobs =await this.prisma.job.findMany({
-        include:{
-          createdBy:true,
-          proposal:true,
-          assigned:true
-        }
-      })
-      return jobs
+      const jobs = await this.prisma.job.findMany({
+        include: {
+          createdBy: true,
+          proposal: true,
+          assigned: true,
+        },
+      });
+      return jobs;
     } catch (error) {
-      throw new InternalServerErrorException(error)
+      throw new InternalServerErrorException(error);
     }
   }
 
-  // find Job with unique id 
+  // find Job with unique id
   async findJobProposal(jobId: string) {
     try {
       const job = await this.prisma.job.findMany({
         where: {
-          id: jobId
+          id: jobId,
         },
         include: {
           proposal: {
             include: {
-              vendor: true // Include the vendor details for each proposal
-            }
-          }
-        }
+              vendor: true, // Include the vendor details for each proposal
+            },
+          },
+        },
       });
-  
+
       if (!job) {
         throw new Error('Job not found');
       }
-  
+
       return job;
     } catch (error) {
       throw new Error('Failed to retrieve proposals: ' + error.message);
     }
   }
-  
-  // EDIT JOB 
-  async EditJobs(updateJobDto:UpdateJobDto,jobId){
+
+  // EDIT JOB
+  async EditJobs(updateJobDto: UpdateJobDto, jobId) {
     try {
-      const {title,description,price} =updateJobDto
-      const job =await this.prisma.job.findUnique({
- where:{
-  id:jobId
- }
-      })
-      if (!job) {
-         throw new NotFoundException( 'Job not found' );
-      }
-      const updateJob =await this.prisma.job.update({
-        where:{
-          id:jobId
+      const { title, description, price } = updateJobDto;
+      const job = await this.prisma.job.findUnique({
+        where: {
+          id: jobId,
         },
-        data:{
+      });
+      if (!job) {
+        throw new NotFoundException('Job not found');
+      }
+      const updateJob = await this.prisma.job.update({
+        where: {
+          id: jobId,
+        },
+        data: {
           title,
           description,
-          price
-        }
-      })
-      return updateJob
+          price,
+        },
+      });
+      return updateJob;
     } catch (error) {
-      throw new  InternalServerErrorException(error.message)
+      throw new InternalServerErrorException(error.message);
     }
-
   }
 
   // delete job
 
-  async deleteJob (jobId){
+  async deleteJob(jobId) {
     try {
-      const findJob =await this.prisma.job.findUnique({
-        where:{
-          id:jobId
-        }
-      })
-      if(!findJob){
-        throw new NotFoundException( 'Job not found' );
+      const findJob = await this.prisma.job.findUnique({
+        where: {
+          id: jobId,
+        },
+      });
+      if (!findJob) {
+        throw new NotFoundException('Job not found');
       }
-      const deleteJob =await this.prisma.job.delete({
-        where:{
-          id:jobId
-        }
-      })
-      return deleteJob
+      const deleteJob = await this.prisma.job.delete({
+        where: {
+          id: jobId,
+        },
+      });
+      return deleteJob;
     } catch (error) {
-      throw new InternalServerErrorException(error.message)
+      throw new InternalServerErrorException(error.message);
     }
-
   }
 }
