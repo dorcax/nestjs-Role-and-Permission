@@ -7,7 +7,7 @@ const Job = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy,setSortBy] =useState("")
     const[isOpen,setIsOpen] =useState(false)
-  return (<section className="relative bg-gray-100 min-h-screen">
+  return (<section className="relative bg-gray-100 min-h-screen overflow-hidden">
     <div className="container mx-auto px-8 py-10">
       <div className="flex flex-wrap gap-10 justify-start py-2 w-full">
         
@@ -33,21 +33,11 @@ const Job = () => {
               <i class="fa-solid fa-magnifying-glass"></i>
             </span>
           </div>
-
-          
-
-          
-            <select name="" id="" className='w-[200px] rounded-md outline-none' value={sortBy} onChange={(e)=>setSortBy(e.target.value)}>
-
-            <option>sort by</option>
-            <option value="ascending">ascending</option>
-            <option value="descending">descending </option>
-            </select>
           
         </div>
     
       </div>
-   <div className='flex justify-end'>
+   <div className='flex justify-end m-4 '>
      <button className='w-[150px] bg-blue-800  border-2 rounded-md py-2 capitalize text-white hover:bg-blue-600' onClick={()=>setIsOpen(true)}>
       add new job
     </button></div>

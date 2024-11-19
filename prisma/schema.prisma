@@ -47,7 +47,7 @@ model Job {
   createdById String
   proposal    Proposal[]
   isAssigned  Boolean      @default(false) // Inicates if the job has been given out
-  assigned    AssignedJob?
+  assigned    AssignedJob[]
   createdAt   DateTime     @default(now())
 }
 
@@ -59,7 +59,7 @@ model Proposal {
   price       Float
   job         Job          @relation(fields: [jobId], references: [id])
   jobId       String
-  assigned    AssignedJob?
+  assigned    AssignedJob[]
   isApproved  Boolean      @default(false)
   createdAt   DateTime     @default(now())
 }
@@ -69,9 +69,9 @@ model AssignedJob {
   vendor     Vendor   @relation(fields: [vendorId], references: [id])
   vendorId   String
   proposal   Proposal @relation(fields: [proposalId], references: [id])
-  proposalId String   @unique
+  proposalId String  
   job        Job      @relation(fields: [jobId], references: [id])
-  jobId      String   @unique
+  jobId      String   
 }
 
 enum Role {

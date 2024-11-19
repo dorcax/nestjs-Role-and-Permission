@@ -19,16 +19,16 @@ const GetStatistic = () => {
       <div>
         {statistics ? (
           <div className="flex flex-wrap gap-6">
-            <div className="border-2 w-[220px] bg-white shadow-lg h-[100px] rounded-md flex flex-col items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out ">
+            <div className="border-2 w-full sm:w-[220px] bg-white shadow-lg h-[100px] rounded-md flex flex-col items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out ">
               Total Vendors <span>{statistics.totalVendors}</span>{' '}
             </div>
-            <div className="border-2 w-[220px] bg-white shadow-lg h-[100px] rounded-md flex flex-col items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out">
+            <div className="border-2 w-full sm:w-[220px] bg-white shadow-lg h-[100px] rounded-md flex flex-col items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out">
               Total Jobs <span>{statistics.totalJobs}</span>
             </div>
-            <div className="border-2 w-[220px] bg-white shadow-lg h-[100px] rounded-md flex flex-col items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out">
+            <div className="border-2 w-full  sm:w-[220px] bg-white shadow-lg h-[100px] rounded-md flex flex-col items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out">
               Approved Vendors <span> {statistics.approvedVendors}</span>
             </div>
-            <div className="border-2 w-[220px] bg-white shadow-lg h-[100px] rounded-md flex flex-col items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out">
+            <div className="border-2 w-full sm:w-[220px] bg-white shadow-lg h-[100px] rounded-md flex flex-col items-center justify-center text-gray-700 hover:shadow-xl hover:bg-blue-50 transition duration-300 ease-in-out">
               Total Users <span>{statistics.totalUsers} </span>
             </div>
           

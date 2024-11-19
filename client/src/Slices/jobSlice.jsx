@@ -206,21 +206,6 @@ const jobSlice =createSlice({
             state.loading = false;
   const assignedJob = action.payload;
 
-//   state.jobs = state.jobs.map((job) => {
-//     if (job.id === assignedJob.id) {
-//       // Assign the job to the specified vendor and update proposals
-//       job.assignedVendor = assignedJob.vendorId; // assuming `vendorId` is part of the payload
-//       job.isAssigned = true; // Flag to show job is assigned
-
-//       job.proposals = job.proposals.map((proposalItem) =>
-//         proposalItem && proposalItem.id === assignedJob.proposal.id
-//           ? { ...proposalItem, status: 'Assigned' } // Mark proposal as assigned
-//           : proposalItem
-//       );
-//     }
-//     return job;
-       
-//         })
 state.jobs = state.jobs.map((job) =>
     job.id === action.payload.id ? action.payload : job
     )

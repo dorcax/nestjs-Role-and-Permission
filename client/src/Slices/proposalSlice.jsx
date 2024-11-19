@@ -30,6 +30,31 @@ export const fetchProposal = createAsyncThunk(
   },
 );
 
+
+// fetch many proposal
+export const fetchProposals = createAsyncThunk(
+  'fetch/all/proposal',
+  async (jobId, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const token = state.auth.token;
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/proposal/getProposals`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      return res.data;
+    } catch (error) {
+      let errorMessage = error.response?.data?.message || error.message;
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  },
+);
+
 // approval endpoint
 
 export const approveProposal = createAsyncThunk(
@@ -74,6 +99,19 @@ const proposalSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchProposal.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // fetch all proposal
+      .addCase(fetchProposals.pending, (state) => {
+        (state.loading = true), (state.error = null);
+      })
+      .addCase(fetchProposals.fulfilled, (state, action) => {
+        state.loading = false;
+        state.proposals = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchProposals.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

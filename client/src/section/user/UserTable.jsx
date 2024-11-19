@@ -8,9 +8,7 @@ const UserTable = () => {
   const { users, loadingg } = useSelector((state) => state.user);
   const [selectedUser,setSelectedUser]=useState(null)
   const[isOpen,setIsOpen] =useState(false)
-  useEffect(()=>{
-dispatch(fetchUsers())
-  },[dispatch])
+
 
   const handleUpdateChange =(id)=>{
     setSelectedUser(id)
@@ -26,8 +24,8 @@ dispatch(fetchUsers())
     });
   }
   return (
-    <div className="overflow-auto mt-6">
-      <table className="border-2 w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden ">
+    <div >
+      <table className="border-2 w-full border-collapse bg-white shadow-lg rounded-lg  ">
         <thead>
           <tr className=" text-gray-900 text-left ">
             {/* <th className='px-6 py-6 font-medium uppercase tracking-wider'>id</th> */}

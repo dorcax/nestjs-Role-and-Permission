@@ -10,11 +10,11 @@ const Vendor = () => {
   const { loading, error, vendor } = useSelector((state) => state.vendor);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy,setSortBy] =useState("")
+  const [sortBy, setSortBy] = useState('');
   // const token =JSON.parse(localStorage.getItem('token'));
 
-  const [isOpen,setIsOpen] =useState(false)
-  const [selectedVendor,setSelectedVendor] =useState(null)
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedVendor, setSelectedVendor] = useState(null);
 
   useEffect(() => {
     if (token) {
@@ -31,22 +31,20 @@ const Vendor = () => {
     } else {
       console.log('No token found');
     }
-  }, [dispatch, token, filter,searchTerm]);
-
+  }, [dispatch, token, filter, searchTerm]);
 
   return (
-    <section className="relative bg-gray-100 min-h-screen">
-      <div className="container mx-auto px-8 py-10">
+    <section className="relative bg-gray-100 min-h-screen overflow-hidden ">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
         <div className="flex flex-wrap gap-10 justify-start py-2 w-full">
-          
-          <GetStatistic/>
+          <GetStatistic />
         </div>
         {/* table */}
         <div>
           <h1 className="text-md font-semibold text-gray-800 py-4 capitalize">
             All Vendors
           </h1>
-          <div className="flex gap-6 justify-start">
+          <div className="flex flex-wrap gap-4 sm:gap-6 justify-start">
             <div className="relative">
               <input
                 type="text"
@@ -57,7 +55,7 @@ const Vendor = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <span className="absolute right-3 top-2  " >
+              <span className="absolute right-3 top-2  ">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </span>
             </div>
@@ -74,19 +72,10 @@ const Vendor = () => {
               <option value="pending">pending</option>
               <option value="all">all</option>
             </select>
-
-            
-              <select name="" id="" className='w-[200px] rounded-md outline-none' value={sortBy} onChange={(e)=>setSortBy(e.target.value)}>
-
-              <option>sort by</option>
-              <option value="ascending">ascending</option>
-              <option value="descending">descending </option>
-              </select>
-            
           </div>
         </div>
-        <div className="overflow-auto mt-6">
-          <VendorTable/>
+        <div className="overflow-auto mt-6 max-w-sm sm:max-w-full">
+          <VendorTable />
         </div>
       </div>
     </section>

@@ -29,20 +29,21 @@ const ViewJobProposals = () => {
 
     const isAssigned = status === 'assign';
     if (status === 'assign') {
-      dispatch(assignJob({ jobId, vendorId, proposalId, isAssigned }));
-    } else if(status ==="unassign"){
+      dispatch(assignJob({ jobId, vendorId, proposalId,isAssigned }));
+    } 
+    else if(status ==="unassign"){
       dispatch(assignJob({ jobId, vendorId, proposalId, isAssigned }));
     }
   };
 
   return (
-    <div className="overflow-auto mt-6 px-4">
+    <div className="overflow-hidden mt-6 px-4 w-full">
       <h2 className="text-3xl font-semibold mb-6 text-blue-800 text-center">
         {job?.title || 'Job Title'}
       </h2>
 
       {proposals.length > 0 ? (
-        <table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden border-separate border-spacing-0">
+        <table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden ">
           <thead>
             <tr className="bg-gray-200 text-gray-900 text-left">
               <th className="px-4 py-3 font-medium text-sm text-gray-700">

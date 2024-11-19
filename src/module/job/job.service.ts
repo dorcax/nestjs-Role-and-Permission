@@ -63,21 +63,21 @@ export class JobService {
     }
 
     // find if proposal exist and is approved
-    const proposal = await this.prisma.proposal.findMany({
+    const proposal = await this.prisma.proposal.findUnique({
       where: {
         id: proposalId,
       },
     });
-    if (!proposal ) {
+    if (!proposal  || !proposal.isApproved) {
       throw new NotFoundException(
         'proposal id not found   proposal not approved',
       );
     }
-    console.log("pppppp",proposal)
+    
     // assign job to the vendor
     if (isAssigned) {
       if (job.isAssigned) {
-        throw new BadRequestException('job is already assigned');
+        throw new BadRequestException('Job is already assigned');
       }
       const assignJob = await this.prisma.assignedJob.create({
         data: {
@@ -93,7 +93,7 @@ export class JobService {
           },
           proposal: {
             connect: {
-              id:proposal.id,
+              id:proposalId,
             },
           },
         },
@@ -108,30 +108,35 @@ export class JobService {
           isAssigned: isAssigned,
         },
       });
-      return { message: 'job assigned successfully' };
-    } else if (!job.isAssigned) {
-      await this.prisma.assignedJob.deleteMany({
-        where: {
-          id: jobId,
-          proposalId: proposalId,
-          vendorId: vendorId,
-        },
-      });
-      await this.prisma.job.update({
-        where: {
-          id: jobId,
-        },
-        data: {
-          isAssigned: isAssigned,
-        },
-      });
-      return { message: 'Job unassigned successfully' };
+      console.log("kkkssddk",jobStatus)
+      return { message: 'job assigned successfully' ,jobStatus};
+    } else  {
+      if (job.isAssigned){
+        const unassigned=  await this.prisma.assignedJob.deleteMany({
+          where: {
+            jobId: jobId,
+            proposalId: proposalId,
+            vendorId: vendorId,
+          },
+        });
+const jobStatus=await this.prisma.job.update({
+          where: {
+            id: jobId,
+          },
+          data: {
+            isAssigned:isAssigned,
+          },
+        });
+       console.log("kkkk",jobStatus)
+        return { message: 'Job unassigned successfully',jobStatus };
+      }
+    
     }
    } catch (error) {
     throw new Error('Failed to : ' + error.message);
    }
   }
-
+ 
   // ffind all jobs
   async findAllJobs() {
     try {
@@ -158,7 +163,7 @@ export class JobService {
         include: {
           proposal: {
             include: {
-              vendor: true, // Include the vendor details for each proposal
+              vendor: true, 
             },
           },
         },

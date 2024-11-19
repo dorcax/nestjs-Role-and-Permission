@@ -52,6 +52,13 @@ export class ProposalController {
   @UseGuards(AuthGuard, RolesGuard)
   @Get("getProposals/:jobId")
   findProposal(@Param("jobId") jobId:string){
-    return this.proposalService.findProposals(jobId)
+    return this.proposalService.findJobProposals(jobId)
+  }
+
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get("getProposals")
+  findProposals(){
+    return this.proposalService.findProposals()
   }
 }

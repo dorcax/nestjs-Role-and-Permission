@@ -20,10 +20,7 @@ export class UserController {
     return this.userService.findUsers(searchTerm);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.userService.findOne(+id);
-  // }
+  
 @Roles(Role.ADMIN)
 @UseGuards(AuthGuard,RolesGuard)
   @Patch(':id')

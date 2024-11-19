@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { approveProposal, fetchProposal } from '../../Slices/proposalSlice';
+import { approveProposal, fetchProposals } from '../../Slices/proposalSlice';
 import ProposalView from './ProposalView';
 
 const ProposalTable = () => {
@@ -37,7 +37,7 @@ const ProposalTable = () => {
   return (
     <div>
       <table className="border-2 w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
-        <thead>
+        <thead className='whitespace-nowrap'>
           <tr className="text-gray-900 text-left">
             <th className="px-3 py-4 capitalize tracking-wider">Description</th>
             <th className="px-3 py-4 capitalize tracking-wider">Price</th>
@@ -47,7 +47,7 @@ const ProposalTable = () => {
             <th className="px-3 py-4 capitalize tracking-wider">Assigned</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='whitespace-nowrap'>
           {proposals && proposals.length > 0 ? (
             proposals.map((proposalItem) => {
             
@@ -70,13 +70,7 @@ const ProposalTable = () => {
                       View
                     </button>
                   </td>
-                  <td>
-                    <select className='border2 px-3 py-2 outline-none rounded-lg' value={status} onChange={(e) => handleApprovalChange(e, proposalItem.vendor?.id, proposalItem.id)}>
-                      <option>Status</option>
-                      <option value="approve">Approve</option>
-                      <option value="reject">Reject</option>
-                    </select>
-                  </td>
+
                 </tr>
               );
             })

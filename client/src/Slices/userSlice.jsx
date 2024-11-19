@@ -13,12 +13,13 @@ const initialState={
 export const fetchUsers =createAsyncThunk("fetch/users",async(searchTerm,thunkAPI)=>{
     const state =thunkAPI.getState()
     const token =state.auth.token
-    // const queryParams = new URLSearchParams() 
-    // if(searchTerm){
-    //     queryParams.append("searchTerm",searchTerm)
-    // }
+    const queryParams = new URLSearchParams() 
+    if(searchTerm){
+        queryParams.append("searchTerm",searchTerm)
+    }
 
-    const url =searchTerm?`http://localhost:300/user/allusers?searchTerm=${searchTerm}`:"http://localhost:3000/user/allusers/"
+    const url =queryParams.toString() ?`http://localhost:3000/user/allusers?${queryParams.toString()}`:"http://localhost:3000/user/allusers"
+    // const url =`http://localhost:3000/user/allusers?searchTerm=${searchTerm}`
     try {
         const res =await axios.get(url,{
             headers:{

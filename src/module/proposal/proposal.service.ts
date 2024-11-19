@@ -111,7 +111,7 @@ export class ProposalService {
 
 
   // find many proposal
-  async findProposals(jobId:string) {
+  async findJobProposals(jobId:string) {
     try {
       const proposals = await this.prisma.proposal.findMany({
         where:{
@@ -128,4 +128,22 @@ export class ProposalService {
       throw new InternalServerErrorException(error.message);
     }
   }
+
+
+  // find many proposal
+  async findProposals() {
+    try {
+      const proposals = await this.prisma.proposal.findMany({
+        include:{
+          vendor:true,
+          job:true,
+          assigned:true
+        }
+      });
+      return proposals;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
 }
+

@@ -22,8 +22,8 @@ const ViewJob = ({isOpen,setIsOpen,selectedJob}) => {
 
         <div className="flex">
           <span className="text-md font-semibold  text-gray-700 px-2 ">Status:</span>
-          <span className={` font-normal ${selectedJob?.isApproved ? 'text-blue-600' : 'text-red-500'}`}>
-            {selectedJob?.isApproved ? 'Approved' : 'Not Approved'}
+          <span className={` font-normal ${selectedJob?.isAssigned ? 'text-blue-600' : 'text-red-500'}`}>
+            {selectedJob?.isAssigned ? 'Approved' : 'Not Approved'}
           </span>
         </div>
 

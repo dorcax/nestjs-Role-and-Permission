@@ -40,7 +40,7 @@ const JobTable = () => {
    navigate(`/dashboard/viewJob/${jobId}`)
   }
   return (
-    <div className="overflow-auto mt-6">
+    <div className="overflow-auto mt-6 max-w-sm sm:max-w-full">
       <table className="border-2 w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
         <thead>
           <tr className="text-gray-900 text-left ">
@@ -50,7 +50,7 @@ const JobTable = () => {
             <th className="px-3 py-4 capitalize tracking-wider">isAssigned</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='whitespace-nowrap'>
           {jobs &&
             jobs.map((job) => (
               <tr key={job.id} className=" border-b-2 hover:bg-gray-100 transition-all text-sm">
@@ -60,7 +60,7 @@ const JobTable = () => {
                 <td className="px-3 py-2">{job.isAssigned ? 'Yes' : 'No'}</td>
                 <td>
                   <button
-                    className=" px-4 py-2 rounded-md capitalize bg-blue-800 text-white hover:bg-blue-600 transition-all"
+                    className="   mx-4 px-4 py-2 rounded-md capitalize bg-blue-800 text-white hover:bg-blue-600 transition-all"
                     onClick={() => handleChange(job)}
                   >
                     view
@@ -68,17 +68,17 @@ const JobTable = () => {
                 </td>
                 <td>
                   <button
-                    className=" px-4 py-2 rounded-md capitalize bg-gray-600 text-white hover:bg-gray-800 transition-all"
+                    className="mx-4 px-4 py-2 rounded-md capitalize bg-gray-600 text-white hover:bg-gray-800 transition-all"
                     onClick={() => handleProposals(job.id)}
                   >
                    view proposals
                   </button>
                 </td>
-                <td className="px-1 py-4 text-blue-800" onClick={()=>handleEditChange(job.id)}>
+                <td className=" px-4 sm:px-1 py-4 text-blue-800" onClick={()=>handleEditChange(job.id)}>
                   <i class="fa-solid fa-pen"></i>
                 </td>
                 
-                <td className="px-1 py-4 text-red-700" onClick={()=>handleDelete(job.id)}>
+                <td className=" px-4 sm:px-1 py-4 text-red-700" onClick={()=>handleDelete(job.id)}>
                   <i class="fa-solid fa-trash"></i>
                 </td>
               </tr>

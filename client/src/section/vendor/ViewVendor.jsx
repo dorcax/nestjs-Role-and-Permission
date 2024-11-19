@@ -1,37 +1,51 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch,useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 // import { fetchVendor } from '../../Slices/vendorSlice'
-import { useParams } from 'react-router-dom'
-import Modal from '../../component/Modal'
-const ViewVendor = ({open,setIsOpen,selectedVendor}) => {
-    // const dispatch =useDispatch()
-    // const {vendor} =useSelector((state)=>state.vendor)
-    // const{vendorId} =useParams()
-    // useEffect(()=>{
-    //   dispatch(fetchVendor(selectedVendor))
-    // },[dispatch]) 
-
-    // const[isOpen,setIsOpen] =useState(false)
+import { useParams } from 'react-router-dom';
+import Modal from '../../component/Modal';
+const ViewVendor = ({ open, setIsOpen, selectedVendor }) => {
   return (
-    <div>   
-      <Modal title="vendor details loading" open={open}  setIsOpen={setIsOpen}>
-      <h2>vendor details</h2>
     <div>
-                <p>BusinessName:{selectedVendor.businessName}</p>
-                <p>Description:{selectedVendor.description}</p>
-                <p>BusinessAddress:{selectedVendor.businessAddress}</p>
-                <p>isApproved:{selectedVendor.isApproved?"yes":"No"}</p>
+      <Modal title="vendor details " open={open} setIsOpen={setIsOpen}>
+        <div className="py-5 px-2 space-y-4">
+          <div className="flex ">
+            <span className="text-md font-semibold  text-gray-700 px-2">
+              BusinessName:
+            </span>
+            <span className="text-gray-800 font-normal">
+              {selectedVendor?.businessName}
+            </span>
+          </div>
+          <div className="flex">
+            <span className="text-md font-semibold  text-gray-700 px-2">
+              Description:
+            </span>
+            <span className=" font-normal">{selectedVendor?.description}</span>
+          </div>
+          <div className="flex ">
+            <span className="text-md font-semibold text-gray-700 px-2">
+              BusinessAddress:
+            </span>
+            <span className="text-gray-800 font-normal">
+              {selectedVendor?.businessAddress}
+            </span>
+          </div>
 
-            </div>
-            
-    
+          <div className="flex">
+            <span className="text-md font-semibold  text-gray-700 px-2 ">
+              Status:
+            </span>
+            <span
+              className={` font-normal ${selectedVendor?.isApproved ? 'text-blue-600' : 'text-red-500'}`}
+            >
+              {selectedVendor?.isApproved ? 'Approved' : 'Not Approved'}
+            </span>
+          </div>
+        </div>
        
-       {/* <h2>hello</h2> */}
-
-    
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default ViewVendor
+export default ViewVendor;
